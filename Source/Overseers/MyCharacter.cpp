@@ -29,6 +29,10 @@ void AMyCharacter::Tick(float DeltaTime)
 	case 0: // Grounded
 		break;
 	case 1: // Oversight
+		if (currentAirDashBoost > 0)
+			currentAirDashBoost = FMath::Lerp(currentAirDashBoost, 0, DeltaTime * airDashBoostFadeRate);
+		else
+			currentAirDashBoost = 0;
 		break;
 	case 2: // Grouded -> Oversight
 		if (modeTransitionDelayTimer > 0)
@@ -84,7 +88,7 @@ void AMyCharacter::MoveForward(float AxisValue)
 	}
 	else if (playerMode == 1) // Oversight
 	{
-		SetActorLocation(GetActorLocation() + GetActorForwardVector() * AxisValue * currentOversightFlySpeed);
+		SetActorLocation(GetActorLocation() + GetActorForwardVector() * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1));
 	}
 }
 
@@ -99,7 +103,7 @@ void AMyCharacter::MoveRight(float AxisValue)
 	}
 	else if (playerMode == 1) // Oversight
 	{
-		SetActorLocation(GetActorLocation() + GetActorRightVector() * AxisValue * currentOversightFlySpeed, 0);
+		SetActorLocation(GetActorLocation() + GetActorRightVector() * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1), 0);
 	}
 }
 
@@ -115,9 +119,14 @@ void AMyCharacter::StartSprint()
 {
 	if (!allowMovementInput)
 		return;
+
+	if (!isSprinting && playerMode == 1)
+		currentAirDashBoost = airDashMaxBoost;
+	
 	isCrouched = false;
 	isSprinting = true;
 	UpdateSpeed();
+
 }
 
 void AMyCharacter::StopSprint()

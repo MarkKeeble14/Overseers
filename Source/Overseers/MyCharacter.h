@@ -16,28 +16,46 @@ public:
 	// Sets default values for this character's properties
 	AMyCharacter();
 
-	// Gravity
-	float defaultGravityScale = 3;
-
 	// Jumping
+	UPROPERTY(EditAnywhere)
 	float jumpStrength = 1000;
 
-	// Oversight
-	float ascendSpeed = 2500;
-	float oversightAscendTo = 4000;
-	float descendSpeed = 3250;
-	float oversightDescendTo = 100;
+	// Gravity
+	UPROPERTY(EditAnywhere)
+	float defaultGravityScale = 3;
 
-	// Movement
+	// Oversight Movement
+	UPROPERTY(EditAnywhere)
 	float oversightBaseFlySpeed = 10;
+	UPROPERTY(EditAnywhere)
 	float oversightBoostedFlySpeed = 20;
 	
+	UPROPERTY(EditAnywhere)
+	float airDashMaxBoost = 5;
+	UPROPERTY(EditAnywhere)
+	float airDashBoostFadeRate = 5;
+
+	// Grounded Movement
+	UPROPERTY(EditAnywhere)
 	float groundedMoveSpeed = 600;
+	UPROPERTY(EditAnywhere)
 	float groundedSprintSpeed = 1200;
+	UPROPERTY(EditAnywhere)
 	float crouchSpeed = 300;
 
+	// Mode Transitions
+	UPROPERTY(EditAnywhere)
 	float modeTransitionDelay = 0.5f;
 
+	// Oversight
+	UPROPERTY(EditAnywhere)
+	float ascendSpeed = 2500;
+	UPROPERTY(EditAnywhere)
+	float oversightAscendTo = 4000;
+	UPROPERTY(EditAnywhere)
+	float descendSpeed = 3250;
+	UPROPERTY(EditAnywhere)
+	float oversightDescendTo = 100;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -57,6 +75,8 @@ protected:
 	void ToggleMode();
 	void GroundedToOversight(float DeltaTime);
 	void OversightToGrounded(float DeltaTime);
+
+	float currentAirDashBoost;
 
 	float modeTransitionDelayTimer;
 	float currentTransitionTime;
