@@ -4,32 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Selectable.h"
-#include "GridCell.generated.h"
+#include "CombatManager.generated.h"
 
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class OVERSEERS_API UGridCell : public UActorComponent, public ISelectable
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class OVERSEERS_API UCombatManager : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
+public:	
 	// Sets default values for this component's properties
-	UGridCell();
+	UCombatManager();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UMaterialInstanceDynamic* p_Material;
-
-public:
+public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	virtual void Select() override;
-
-	virtual void Deselect() override;
-
-	void SetDefaultColor(FVector color);
+		
 };

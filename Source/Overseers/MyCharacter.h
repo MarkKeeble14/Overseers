@@ -55,7 +55,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float descendSpeed = 3250;
 	UPROPERTY(EditAnywhere)
-	float oversightDescendTo = 100;
+	float defaultOversightDescendTo = 500;
+	UPROPERTY(EditAnywhere)
+	float foundGroundOversightDescendTo = 100;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -86,13 +88,15 @@ protected:
 	bool allowMovementInput = true;
 
 	float currentOversightFlySpeed;
+	float oversightDescendTo;
 	bool isSprinting;
 	bool isCrouched;
 
 	void ResetMovementStates();
 
-	int playerMode; // 0 = Grounded, 1 = Oversight, 2 = G -> O Transition. 3 -> O -> G Transition
+	bool SetOversightDescendTo();
 
+	int playerMode; // 0 = Grounded, 1 = Oversight, 2 = G -> O Transition. 3 -> O -> G Transition
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

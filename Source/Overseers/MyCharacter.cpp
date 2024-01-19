@@ -182,22 +182,58 @@ void AMyCharacter::UpdateSpeed()
 	}
 }
 
+bool AMyCharacter::SetOversightDescendTo()
+{
+	FVector start = GetActorLocation();
+	FVector end = start - GetActorUpVector() * oversightAscendTo * 2;
+	FHitResult p_HitResult = FHitResult(ForceInit);
+	FCollisionQueryParams p_QueryParams = FCollisionQueryParams(FName(TEXT("Trace")), true, GetOwner());
+	p_QueryParams.bTraceComplex = true;
+	p_QueryParams.bReturnPhysicalMaterial = true;
+	FCollisionObjectQueryParams p_ObjectQueryParams = FCollisionObjectQueryParams(ECC_GameTraceChannel1);
+
+	bool DidTrace = GetWorld()->LineTraceSingleByObjectType(
+		p_HitResult,		//result
+		start,		//start
+		end,		//end
+		p_ObjectQueryParams,	//collision channel
+		p_QueryParams
+	);
+
+	if (DidTrace)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Did Trace"));
+		oversightDescendTo = start.Z - p_HitResult.Distance + foundGroundOversightDescendTo;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Did Not Trace"));
+		oversightDescendTo = defaultOversightDescendTo;
+	}
+
+	return DidTrace;
+}
+
 void AMyCharacter::ToggleMode()
 {
 	switch (playerMode)
 	{
-		case 0:
+		case 0: // Begin Grouded -> Oversight
 			allowMovementInput = false;
 			modeTransitionDelayTimer = modeTransitionDelay;
 			GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 			currentTransitionTime = 0;
 			playerMode = 2;
 			break;
-		case 1:
+		case 1: // Begin Oversight -> Grounded
 			allowMovementInput = false;
 			modeTransitionDelayTimer = modeTransitionDelay;
 			GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 			currentTransitionTime = 0;
+			
+			// Determine where to stop
+			SetOversightDescendTo();
+
 			playerMode = 3;
 			break;
 		case 2:
