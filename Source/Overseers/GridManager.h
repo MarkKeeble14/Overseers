@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BoardData.h"
 #include "GridCell.h"
 #include "GridManager.generated.h"
 
@@ -19,10 +20,19 @@ public:
 	~UGridManager();
 
 	UPROPERTY(EditAnywhere)
-	UClass* gridCell;
+	UClass* boardCell;
 
 	UPROPERTY(EditAnywhere)
-	float gridSize = 10;
+	UClass* benchCell;
+
+	UPROPERTY(EditAnywhere)
+	UClass* boardSeparator;
+
+	UPROPERTY(EditAnywhere)
+	float boardSize = 10;
+
+	UPROPERTY(EditAnywhere)
+	float benchSize = 10;
 
 	UPROPERTY(EditAnywhere)
 	float gridSpacing = 1000;
@@ -31,16 +41,30 @@ public:
 	float gridCellHeightScale = .25;
 
 	UPROPERTY(EditAnywhere)
+	int testMatchupConfiguration = 0;
+
+	UPROPERTY(EditAnywhere)
 	FVector color1 = FVector(.1, .1, .1);
 
 	UPROPERTY(EditAnywhere)
 	FVector color2 = FVector(.25, .25, .25);
 
-	void PopulateGrid();
+	void MakeGrid(int playerId);
 
 	virtual void BeginPlay() override;
 
 protected:
-	std::vector<AActor*> spawnedGrid;
-	int numGridsSpawned;
+	TMap<int, BoardData> spawnedGrid;
+
+	TMap<int, AActor*> spawnedBoardSeparators;
+
+	void IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir);
+
+	void SpawnBoardSeparators();
+
+	AActor* GetRespectiveBoardSeparator(int combatentId1, int combatentId2);
+
+	void SetBoardSeparatorState(bool active, AActor* separator);
+
+	void SetupMatches(int config);
 };
