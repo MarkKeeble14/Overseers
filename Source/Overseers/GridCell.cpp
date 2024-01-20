@@ -52,3 +52,32 @@ void UGridCell::SetDefaultColor(FVector color)
 	mesh->SetMaterial(0, p_Material);
 	p_Material->SetVectorParameterValue("BaseColor", color);
 }
+
+bool UGridCell::GetIsOccupied()
+{
+	return p_CurrentOccupant != nullptr;
+}
+
+ACellOccupant* UGridCell::GetCurrentOccupant()
+{
+	return p_CurrentOccupant;
+}
+
+void UGridCell::RemoveCurrentOccupant()
+{
+	p_CurrentOccupant = nullptr;
+}
+
+void UGridCell::SetCurrentOccupant(ACellOccupant* occupant)
+{
+	occupant->SetActorLocation(GetOwner()->GetActorLocation());
+	int actorScale = GetOwner()->GetActorScale3D().X;
+	occupant->SetActorScale3D(FVector(actorScale, actorScale, actorScale));
+
+	p_CurrentOccupant = occupant;
+}
+
+void UGridCell::SwapOccupants(UGridCell* otherCell)
+{
+	// ?
+}

@@ -99,3 +99,8 @@ bool USelectLookingAt::DoTrace()
 
 	return DidTrace;
 }
+
+ISelectable* USelectLookingAt::GetSelected()
+{
+	return p_Selected;
+}
