@@ -15,13 +15,24 @@ ACellOccupant::ACellOccupant()
 void ACellOccupant::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// Make new material instances
+	p_Mesh = GetComponentByClass<UStaticMeshComponent>();
+	p_OwnedPlacedMaterial = UMaterialInstanceDynamic::Create(p_PlacedMaterial, NULL);
+	p_OwnedGhostMaterial = UMaterialInstanceDynamic::Create(p_GhostMaterial, NULL);
 }
 
 // Called every frame
 void ACellOccupant::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
+void ACellOccupant::SetPlaced(bool b)
+{
+	m_Placed = b;
+	if (b)
+		p_Mesh->SetMaterial(0, p_OwnedPlacedMaterial);
+	else
+		p_Mesh->SetMaterial(0, p_OwnedGhostMaterial);
+}

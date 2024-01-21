@@ -70,14 +70,25 @@ void UGridCell::RemoveCurrentOccupant()
 
 void UGridCell::SetCurrentOccupant(ACellOccupant* occupant)
 {
-	occupant->SetActorLocation(GetOwner()->GetActorLocation());
-	int actorScale = GetOwner()->GetActorScale3D().X;
-	occupant->SetActorScale3D(FVector(actorScale, actorScale, actorScale));
+	if (occupant == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Occupant passed to SetCurrentOccupant is nullptr"));
+		p_CurrentOccupant = nullptr;
+		return;
+	}
 
+	AlignOccupantToCell(occupant);
 	p_CurrentOccupant = occupant;
 }
 
 void UGridCell::SwapOccupants(UGridCell* otherCell)
 {
 	// ?
+}
+
+void UGridCell::AlignOccupantToCell(ACellOccupant* occupant)
+{
+	occupant->SetActorLocation(GetOwner()->GetActorLocation());
+	int actorScale = GetOwner()->GetActorScale3D().X;
+	occupant->SetActorScale3D(FVector(actorScale, actorScale, actorScale));
 }

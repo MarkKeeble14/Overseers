@@ -19,8 +19,22 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* p_PlacedMaterial;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* p_GhostMaterial;
+
+	UMaterialInstanceDynamic* p_OwnedPlacedMaterial;
+	UMaterialInstanceDynamic* p_OwnedGhostMaterial;
+
+	UStaticMeshComponent* p_Mesh;
+
+	bool m_Placed;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetPlaced(bool b);
 };

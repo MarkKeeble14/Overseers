@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Selectable.h"
+#include "GridCell.h"
 #include "SelectLookingAt.generated.h"
 
 
@@ -28,13 +29,17 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere)
-	float selectionDistance = 10000;
+	float selectionDistance = 100000;
+
+	void SetSelected(ISelectable* selectable);
 
 	ISelectable* GetSelected();
 
+	UGridCell* GetSelectedGridCell();
 private:
 	FHitResult p_HitResult;
 	FCollisionQueryParams p_QueryParams;
 	FCollisionObjectQueryParams p_ObjectQueryParams;
 	ISelectable* p_Selected;
+	UGridCell* p_SelectedGridCell;
 };

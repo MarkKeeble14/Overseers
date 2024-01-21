@@ -46,6 +46,9 @@ void UGridManager::MakeGrid(int playerId)
 
 			spawnedBoardCells.Add(spawned);
 
+			// Set owned by
+			spawnedCell->SetOwnedByPlayerId(playerId);
+
 			spawnPos.X += gridSpacing * xDir;
 		}
 		spawnPos.Y += gridSpacing * yDir;

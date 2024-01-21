@@ -40,20 +40,6 @@ void UUnitPlacement::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	}
 }
 
-void UUnitPlacement::PickupUnit()
-{
-	if (p_UnitInHand != nullptr) return;
-
-	ISelectable* selected = p_SelectLookingAt->GetSelected();
-	UGridCell* cell = Cast<UGridCell>(selected);
-
-	if (cell != nullptr && cell->GetIsOccupied())
-	{
-		p_UnitInHand = cell->GetCurrentOccupant();
-		cell->SetCurrentOccupant(nullptr);
-	}
-}
-
 void UUnitPlacement::TestSpawnTestUnit()
 {
 	if (p_UnitInHand != nullptr) return;
@@ -63,32 +49,53 @@ void UUnitPlacement::TestSpawnTestUnit()
 
 	ACellOccupant* spawnedOccupant = Cast<ACellOccupant>(spawned);
 
-	if (spawnedOccupant != nullptr)
-	{
-		PassUnitToHand(spawnedOccupant);
-	}
+	PassUnitToHand(spawnedOccupant);
 }
 
 void UUnitPlacement::PassUnitToHand(ACellOccupant* occupant)
 {
 	p_UnitInHand = occupant;
+	p_UnitInHand->SetPlaced(false);
 }
 
 void UUnitPlacement::ConfirmInHandUnitPlacement()
 {
+	// Get the cell
+	UGridCell* cell = p_SelectLookingAt->GetSelectedGridCell();
+
+	// Make sure the cell is not already occupied
+	if (cell->GetIsOccupied()) return;
+
+	// Set the occupant and remove it from the players hand
+	cell->SetCurrentOccupant(p_UnitInHand);
+	p_UnitInHand->SetPlaced(true);
 	p_UnitInHand = nullptr;
 }
 
 void UUnitPlacement::UpdateInHandUnitPlacement()
 {
+	// If there is no unit in hand, no need to place unit (obviously)
 	if (p_UnitInHand == nullptr) return;
 
-	ISelectable* selected = p_SelectLookingAt->GetSelected();
-	UGridCell* cell = Cast<UGridCell>(selected);
+	UGridCell* cell = p_SelectLookingAt->GetSelectedGridCell();
 
-	if (cell != nullptr && !cell->GetIsOccupied())
+	if (cell != nullptr)
 	{
-		cell->SetCurrentOccupant(p_UnitInHand);
+		// Simply align the unit to the cell
+		cell->AlignOccupantToCell(p_UnitInHand);
+	}
+}
+
+void UUnitPlacement::PickupUnit()
+{
+	if (p_UnitInHand != nullptr) return;
+
+	UGridCell* cell = p_SelectLookingAt->GetSelectedGridCell();
+
+	if (cell != nullptr && cell->GetIsOccupied())
+	{
+		PassUnitToHand(cell->GetCurrentOccupant());
+		cell->SetCurrentOccupant(nullptr);
 	}
 }
 
