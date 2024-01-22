@@ -57,24 +57,6 @@ void AMyCharacter::Tick(float DeltaTime)
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	// Bind Input
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMyCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMyCharacter::MoveRight);
-	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AMyCharacter::AddControllerYawInput);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMyCharacter::AddControllerPitchInput);
-
-	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AMyCharacter::Jump);
-
-	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &AMyCharacter::StartSprint);
-	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Repeat, this, &AMyCharacter::StartSprint);
-	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &AMyCharacter::StopSprint);
-
-	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AMyCharacter::StartCrouch);
-	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Repeat, this, &AMyCharacter::StartCrouch);
-	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AMyCharacter::StopCrouch);
-
-	PlayerInputComponent->BindAction(TEXT("ToggleMode"), IE_Pressed, this, &AMyCharacter::ToggleMode);
 }
 
 void AMyCharacter::MoveForward(float AxisValue)
@@ -107,7 +89,7 @@ void AMyCharacter::MoveRight(float AxisValue)
 	}
 }
 
-void AMyCharacter::Jump()
+void AMyCharacter::CallJump()
 {
 	if (!allowMovementInput || playerMode != 0)
 		return;

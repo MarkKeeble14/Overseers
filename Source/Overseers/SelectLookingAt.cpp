@@ -80,13 +80,13 @@ bool USelectLookingAt::DoTrace()
 			// Nothing previously selected
 			if (p_Selected == nullptr)
 			{
-				p_Selected = selectable;
+				SetSelected(selectable);
 				p_Selected->Select();
 			}
 			else if (selectable != p_Selected) // Something different was previously selected
 			{
 				p_Selected->Deselect();
-				p_Selected = selectable;
+				SetSelected(selectable);
 				p_Selected->Select();
 			}
 		}
@@ -98,4 +98,32 @@ bool USelectLookingAt::DoTrace()
 	}
 
 	return DidTrace;
+}
+
+void USelectLookingAt::SetSelected(ISelectable* selectable)
+{
+	if (selectable == nullptr)
+	{
+		p_Selected = nullptr;
+		p_SelectedGridCell = nullptr;
+	}
+	else
+	{
+		p_Selected = selectable;
+
+		//
+		UGridCell* ifGridCell = Cast<UGridCell>(p_Selected);
+		if (ifGridCell != nullptr)
+			p_SelectedGridCell = ifGridCell;
+	}
+}
+
+ISelectable* USelectLookingAt::GetSelected()
+{
+	return p_Selected;
+}
+
+UGridCell* USelectLookingAt::GetSelectedGridCell()
+{
+	return p_SelectedGridCell;
 }
