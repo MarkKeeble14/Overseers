@@ -88,7 +88,25 @@ void UGridCell::SwapOccupants(UGridCell* otherCell)
 
 void UGridCell::AlignOccupantToCell(ACellOccupant* occupant)
 {
-	occupant->SetActorLocation(GetOwner()->GetActorLocation());
+	// Make variables
+	FVector location;
+	FVector bounds;
+	FVector alignedPos;
+
+	// Get the actor bounds of the cell
+	GetOwner()->GetActorBounds(true, location, bounds);
+
+	// Set the spawn position to be the cellLocation plus the number of units from the center to the top of the cell
+	alignedPos = location + bounds.Z / 2;
+
+	// Get the actor bounds of the unit
+	occupant->GetActorBounds(true, location, bounds);
+
+	// Move the spawn position up by the number of units from the center of the unit to the top of the unit
+	alignedPos += FVector(0, 0, bounds.Z);
+
+	// Set the location and scale of the unit
+	occupant->SetActorLocation(alignedPos);
 	int actorScale = GetOwner()->GetActorScale3D().X;
 	occupant->SetActorScale3D(FVector(actorScale, actorScale, actorScale));
 }

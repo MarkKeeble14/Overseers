@@ -19,11 +19,6 @@ void UUnitPlacement::BeginPlay()
 	Super::BeginPlay();
 
 	p_SelectLookingAt = GetOwner()->GetComponentByClass<USelectLookingAt>();
-
-	// Bind Input
-	GetOwner()->InputComponent->BindAction(TEXT("Test1"), IE_Pressed, this, &UUnitPlacement::TestSpawnTestUnit);
-	GetOwner()->InputComponent->BindAction(TEXT("Test2"), IE_Pressed, this, &UUnitPlacement::ConfirmInHandUnitPlacement);
-	GetOwner()->InputComponent->BindAction(TEXT("Test3"), IE_Pressed, this, &UUnitPlacement::PickupUnit);
 }
 
 
@@ -40,12 +35,12 @@ void UUnitPlacement::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	}
 }
 
-void UUnitPlacement::TestSpawnTestUnit()
+void UUnitPlacement::CreateUnit(UClass* unit)
 {
 	if (p_UnitInHand != nullptr) return;
 
 	FVector spawnPos = FVector::ZeroVector;
-	AActor* spawned = GetWorld()->SpawnActor(m_TestUnit, &spawnPos);
+	AActor* spawned = GetWorld()->SpawnActor(unit, &spawnPos);
 
 	ACellOccupant* spawnedOccupant = Cast<ACellOccupant>(spawned);
 
@@ -54,17 +49,25 @@ void UUnitPlacement::TestSpawnTestUnit()
 
 void UUnitPlacement::PassUnitToHand(ACellOccupant* occupant)
 {
+	if (occupant == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Attempted to pass a null unit to hand"));
+		return;
+	}
 	p_UnitInHand = occupant;
 	p_UnitInHand->SetPlaced(false);
 }
 
 void UUnitPlacement::ConfirmInHandUnitPlacement()
 {
+	// If there is no unit in hand, no need to place unit (obviously)
+	if (p_UnitInHand == nullptr) return;
+
 	// Get the cell
 	UGridCell* cell = p_SelectLookingAt->GetSelectedGridCell();
 
 	// Make sure the cell is not already occupied
-	if (cell->GetIsOccupied()) return;
+	if (cell != nullptr && cell->GetIsOccupied()) return;
 
 	// Set the occupant and remove it from the players hand
 	cell->SetCurrentOccupant(p_UnitInHand);
@@ -74,7 +77,7 @@ void UUnitPlacement::ConfirmInHandUnitPlacement()
 
 void UUnitPlacement::UpdateInHandUnitPlacement()
 {
-	// If there is no unit in hand, no need to place unit (obviously)
+	// If there is no unit in hand, no need to update unit (obviously)
 	if (p_UnitInHand == nullptr) return;
 
 	UGridCell* cell = p_SelectLookingAt->GetSelectedGridCell();
@@ -99,3 +102,18 @@ void UUnitPlacement::PickupUnit()
 	}
 }
 
+void UUnitPlacement::TestSpawnTestUnit1()
+{
+	UE_LOG(LogTemp, Warning, TEXT("AH"));
+	CreateUnit(m_TestUnit1);
+}
+
+void UUnitPlacement::TestSpawnTestUnit2()
+{
+	CreateUnit(m_TestUnit2);
+}
+
+void UUnitPlacement::TestSpawnTestUnit3()
+{
+	CreateUnit(m_TestUnit3);
+}

@@ -16,7 +16,6 @@ void ACellOccupant::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Make new material instances
 	p_Mesh = GetComponentByClass<UStaticMeshComponent>();
 	p_OwnedPlacedMaterial = UMaterialInstanceDynamic::Create(p_PlacedMaterial, NULL);
 	p_OwnedGhostMaterial = UMaterialInstanceDynamic::Create(p_GhostMaterial, NULL);
@@ -30,6 +29,9 @@ void ACellOccupant::Tick(float DeltaTime)
 
 void ACellOccupant::SetPlaced(bool b)
 {
+	// null checks & getting references
+	if (p_PlacedMaterial == nullptr || p_GhostMaterial == nullptr || p_Mesh == nullptr) return;
+
 	m_Placed = b;
 	if (b)
 		p_Mesh->SetMaterial(0, p_OwnedPlacedMaterial);

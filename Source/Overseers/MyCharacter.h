@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "InputMappingContext.h"
+#include "EnhancedInputSubsystems.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -15,6 +17,9 @@ class OVERSEERS_API AMyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
+
+	UPROPERTY(EditAnywhere)
+	UInputMappingContext* myInputMappingContext;
 
 	// Jumping
 	UPROPERTY(EditAnywhere)
@@ -62,28 +67,18 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void MoveForward(float AxisValue);
-
-	void MoveRight(float AxisValue);
-
-	void Jump();
-
-	void StartSprint();
-	void StopSprint();
-
-	void StartCrouch();
-	void StopCrouch();
-
-	void ToggleMode();
+	void UpdateSpeed();
+	void ResetMovementStates();
+	
 	void GroundedToOversight(float DeltaTime);
 	void OversightToGrounded(float DeltaTime);
+
+	bool SetOversightDescendTo();
 
 	float currentAirDashBoost;
 
 	float modeTransitionDelayTimer;
 	float currentTransitionTime;
-
-	void UpdateSpeed();
 
 	bool allowMovementInput = true;
 
@@ -91,10 +86,6 @@ protected:
 	float oversightDescendTo;
 	bool isSprinting;
 	bool isCrouched;
-
-	void ResetMovementStates();
-
-	bool SetOversightDescendTo();
 
 	int playerMode; // 0 = Grounded, 1 = Oversight, 2 = G -> O Transition. 3 -> O -> G Transition
 public:	
@@ -104,4 +95,27 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	void MoveForward(float AxisValue);
+
+	UFUNCTION(BlueprintCallable)
+	void MoveRight(float AxisValue);
+
+	UFUNCTION(BlueprintCallable)
+	void CallJump();
+
+	UFUNCTION(BlueprintCallable)
+	void StartSprint();
+
+	UFUNCTION(BlueprintCallable)
+	void StopSprint();
+
+	UFUNCTION(BlueprintCallable)
+	void StartCrouch();
+
+	UFUNCTION(BlueprintCallable)
+	void StopCrouch();
+
+	UFUNCTION(BlueprintCallable)
+	void ToggleMode();
 };
