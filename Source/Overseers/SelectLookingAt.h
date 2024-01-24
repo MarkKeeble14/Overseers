@@ -24,6 +24,8 @@ protected:
 
 	bool DoTrace();
 
+	int m_CanSelectBelongingTo;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -31,15 +33,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	float selectionDistance = 100000;
 
-	void SetSelected(ISelectable* selectable);
+	void SetCanSelectBelongingTo(int canSelect) { m_CanSelectBelongingTo = canSelect; UE_LOG(LogTemp, Warning, TEXT("Can Select: %d"), m_CanSelectBelongingTo); }
 
-	ISelectable* GetSelected();
+	UFUNCTION(BlueprintCallable)
+	bool HasSomethingSelected() { return p_SelectedGridCell != nullptr; }
 
 	UGridCell* GetSelectedGridCell();
 private:
 	FHitResult p_HitResult;
 	FCollisionQueryParams p_QueryParams;
 	FCollisionObjectQueryParams p_ObjectQueryParams;
-	ISelectable* p_Selected;
 	UGridCell* p_SelectedGridCell;
 };

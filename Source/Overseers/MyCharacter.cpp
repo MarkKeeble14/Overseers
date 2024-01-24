@@ -7,6 +7,8 @@ AMyCharacter::AMyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -14,7 +16,27 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetCharacterMovement()->JumpZVelocity = jumpStrength;
+	if (!m_HasRecievedPlayerIndex)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("MyCharacter Begin Play"));
+
+		GetCharacterMovement()->JumpZVelocity = jumpStrength;
+
+		// Get the network manager
+		p_NetworkManager = Cast<AMyNetworkManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AMyNetworkManager::StaticClass()));
+
+		// Get a reference to the select looking at component
+		USelectLookingAt* selectLookingAt = FindComponentByClass<USelectLookingAt>();
+
+		// Set the player Index
+		if (selectLookingAt != nullptr && p_NetworkManager != nullptr)
+		{
+			selectLookingAt->SetCanSelectBelongingTo(p_NetworkManager->GetNextPlayerIndex());
+			p_NetworkManager->IncrementNextPlayerIndex();
+		}
+
+		m_HasRecievedPlayerIndex = true;
+	}
 }
 
 // Called every frame
@@ -23,7 +45,7 @@ void AMyCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	GetCharacterMovement()->GravityScale = playerMode == 0 ? defaultGravityScale : 0;
-	
+
 	switch (playerMode)
 	{
 	case 0: // Grounded
@@ -64,13 +86,18 @@ void AMyCharacter::MoveForward(float AxisValue)
 	if (!allowMovementInput)
 		return;
 
+	FVector toMove;
 	if (playerMode == 0) // Grounded
 	{
-		AddMovementInput(GetActorForwardVector() * AxisValue);
+		toMove = GetActorForwardVector() * AxisValue;
+		toMove.Z = 0;
+		AddMovementInput(toMove);
 	}
 	else if (playerMode == 1) // Oversight
 	{
-		SetActorLocation(GetActorLocation() + GetActorForwardVector() * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1));
+		toMove = GetActorLocation() + GetActorForwardVector() * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1);
+		toMove.Z = GetActorLocation().Z;
+		SetActorLocation(toMove, 0);
 	}
 }
 
@@ -79,13 +106,18 @@ void AMyCharacter::MoveRight(float AxisValue)
 	if (!allowMovementInput)
 		return;
 
+	FVector toMove;
 	if (playerMode == 0)	// Grounded
 	{
-		AddMovementInput(GetActorRightVector() * AxisValue);
+		toMove = GetActorRightVector() * AxisValue;
+		toMove.Z = 0;
+		AddMovementInput(toMove);
 	}
 	else if (playerMode == 1) // Oversight
 	{
-		SetActorLocation(GetActorLocation() + GetActorRightVector() * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1), 0);
+		toMove = GetActorLocation() + GetActorRightVector() * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1);
+		toMove.Z = GetActorLocation().Z;
+		SetActorLocation(toMove, 0);
 	}
 }
 
@@ -121,14 +153,17 @@ void AMyCharacter::StartCrouch()
 {
 	if (!allowMovementInput || playerMode != 0)
 		return;
+
 	isSprinting = false;
 	isCrouched = true;
+
 	UpdateSpeed();
 }
 
 void AMyCharacter::StopCrouch()
 {
 	isCrouched = false;
+
 	UpdateSpeed();
 }
 
@@ -136,19 +171,17 @@ void AMyCharacter::UpdateSpeed()
 {
 	if (playerMode == 0)
 	{
-		if (isCrouched)
-		{
-			GetCharacterMovement()->MaxWalkSpeed = crouchSpeed;
-			return;
-		}
-
 		if (isSprinting)
 		{
 			GetCharacterMovement()->MaxWalkSpeed = groundedSprintSpeed;
 			return;
 		}
 		
-		GetCharacterMovement()->MaxWalkSpeed = groundedMoveSpeed;
+		if (!isCrouched)
+		{
+			GetCharacterMovement()->MaxWalkSpeed = groundedMoveSpeed;
+		}
+		
 	}
 	else if (playerMode == 1)
 	{

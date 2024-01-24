@@ -104,7 +104,6 @@ void UUnitPlacement::PickupUnit()
 
 void UUnitPlacement::TestSpawnTestUnit1()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AH"));
 	CreateUnit(m_TestUnit1);
 }
 
