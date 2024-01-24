@@ -26,7 +26,7 @@ void USelectLookingAt::BeginPlay()
 	p_ObjectQueryParams = FCollisionObjectQueryParams(ECC_GameTraceChannel1);
 
 	// ...
-	
+
 }
 
 
@@ -68,59 +68,35 @@ bool USelectLookingAt::DoTrace()
 				break;
 		}
 
-		// For some reason hit an object that is not selectable
-		if (selectable == nullptr)
+		UGridCell* gridCell = Cast<UGridCell>(selectable);
+		if (gridCell == nullptr)
 		{
-			if (p_Selected != nullptr)
-				p_Selected->Deselect();
-			return false;
+			if (p_SelectedGridCell != nullptr)
+				p_SelectedGridCell->Deselect();
+			p_SelectedGridCell = nullptr;
 		}
-		else // Something was hit to select
+		else if (gridCell->GetOwnedByPlayerId() == m_CanSelectBelongingTo)
 		{
-			// Nothing previously selected
-			if (p_Selected == nullptr)
-			{
-				SetSelected(selectable);
-				p_Selected->Select();
-			}
-			else if (selectable != p_Selected) // Something different was previously selected
-			{
-				p_Selected->Deselect();
-				SetSelected(selectable);
-				p_Selected->Select();
-			}
+			if (p_SelectedGridCell != nullptr)
+				p_SelectedGridCell->Deselect();
+			p_SelectedGridCell = gridCell;
+			p_SelectedGridCell->Select();
+		}
+		else 
+		{
+			if (p_SelectedGridCell != nullptr)
+				p_SelectedGridCell->Deselect();
+			p_SelectedGridCell = nullptr;
 		}
 	}
 	else 
 	{
-		if (p_Selected != nullptr) p_Selected->Deselect();
-		p_Selected = nullptr;
+		if (p_SelectedGridCell != nullptr)
+			p_SelectedGridCell->Deselect();
+		p_SelectedGridCell = nullptr;
 	}
 
 	return DidTrace;
-}
-
-void USelectLookingAt::SetSelected(ISelectable* selectable)
-{
-	if (selectable == nullptr)
-	{
-		p_Selected = nullptr;
-		p_SelectedGridCell = nullptr;
-	}
-	else
-	{
-		p_Selected = selectable;
-
-		//
-		UGridCell* ifGridCell = Cast<UGridCell>(p_Selected);
-		if (ifGridCell != nullptr)
-			p_SelectedGridCell = ifGridCell;
-	}
-}
-
-ISelectable* USelectLookingAt::GetSelected()
-{
-	return p_Selected;
 }
 
 UGridCell* USelectLookingAt::GetSelectedGridCell()

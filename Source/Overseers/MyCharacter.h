@@ -5,8 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
+#include "MyNetworkManager.h"
+#include "SelectLookingAt.h"
+#include <Kismet/GameplayStatics.h>
+
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -45,8 +50,6 @@ public:
 	float groundedMoveSpeed = 600;
 	UPROPERTY(EditAnywhere)
 	float groundedSprintSpeed = 1200;
-	UPROPERTY(EditAnywhere)
-	float crouchSpeed = 300;
 
 	// Mode Transitions
 	UPROPERTY(EditAnywhere)
@@ -63,6 +66,16 @@ public:
 	float defaultOversightDescendTo = 500;
 	UPROPERTY(EditAnywhere)
 	float foundGroundOversightDescendTo = 100;
+
+	// Network
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AActor> ClassToFind;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<AActor*> FoundActors;
+
+
+	AMyNetworkManager* p_NetworkManager;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -84,10 +97,13 @@ protected:
 
 	float currentOversightFlySpeed;
 	float oversightDescendTo;
+
 	bool isSprinting;
 	bool isCrouched;
 
 	int playerMode; // 0 = Grounded, 1 = Oversight, 2 = G -> O Transition. 3 -> O -> G Transition
+	
+	bool m_HasRecievedPlayerIndex;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -118,4 +134,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ToggleMode();
+
+	UFUNCTION(BlueprintCallable)
+	bool GetIsSprinting() { return isSprinting; }
+
+	UFUNCTION(BlueprintCallable)
+	int GetPlayerMode() { return playerMode; }
 };

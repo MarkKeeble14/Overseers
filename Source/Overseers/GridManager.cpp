@@ -67,10 +67,13 @@ void UGridManager::MakeGrid(int playerId)
 	for (int i = 0; i < benchSize; i++)
 	{
 		spawned = GetWorld()->SpawnActor(benchCell, &spawnPos);
+		UGridCell* spawnedCell = spawned->GetComponentByClass<UGridCell>();
 		spawned->SetActorScale3D(cellScale);
 
 		IncrementBenchPosition(playerId, &spawnPos, gridSpacing, xDir, yDir);
 		spawnedBenchCells.Add(spawned);
+
+		spawnedCell->SetOwnedByPlayerId(playerId);
 	}
 
 	// Insert newly spawned board into map
@@ -181,15 +184,15 @@ void UGridManager::SetupMatches(int config)
 			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(1, 2));
 			break;
 		case 2:
-			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(0, 1));
-			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(3, 2));
-			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(0, 3));
-			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(1, 2));
-		case 3:
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(0, 1));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(3, 2));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(0, 3));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(1, 2));
+		case 3:
+			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(0, 1));
+			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(3, 2));
+			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(0, 3));
+			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(1, 2));
 		default:
 			break;
 	}
