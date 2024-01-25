@@ -101,18 +101,3 @@ void UUnitPlacement::PickupUnit()
 		cell->SetCurrentOccupant(nullptr);
 	}
 }
-
-void UUnitPlacement::TestSpawnTestUnit1()
-{
-	CreateUnit(m_TestUnit1);
-}
-
-void UUnitPlacement::TestSpawnTestUnit2()
-{
-	CreateUnit(m_TestUnit2);
-}
-
-void UUnitPlacement::TestSpawnTestUnit3()
-{
-	CreateUnit(m_TestUnit3);
-}
