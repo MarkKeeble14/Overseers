@@ -27,8 +27,6 @@ protected:
 
 	USelectLookingAt* p_SelectLookingAt;
 
-	void CreateUnit(UClass* unit);
-
 	void PassUnitToHand(ACellOccupant* occupant);
 
 	void UpdateInHandUnitPlacement();
@@ -37,28 +35,15 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditAnywhere)
-	UClass* m_TestUnit1;
-
-	UPROPERTY(EditAnywhere)
-	UClass* m_TestUnit2;
-
-	UPROPERTY(EditAnywhere)
-	UClass* m_TestUnit3;
-
 	UFUNCTION(BlueprintCallable)
 	void ConfirmInHandUnitPlacement();
 
 	UFUNCTION(BlueprintCallable)
 	void PickupUnit();
 
-	// REMOVE
 	UFUNCTION(BlueprintCallable)
-	void TestSpawnTestUnit1();
+	void CreateUnit(UClass* unit);
 
 	UFUNCTION(BlueprintCallable)
-	void TestSpawnTestUnit2();
-
-	UFUNCTION(BlueprintCallable)
-	void TestSpawnTestUnit3();
+	bool IsHandEmpty() { return p_UnitInHand == nullptr; }
 };
