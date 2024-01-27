@@ -54,7 +54,7 @@ public:
 	virtual void BeginPlay() override;
 
 protected:
-	TMap<int, BoardData> spawnedGrid;
+	TMap<int, FBoardData> spawnedGrid;
 
 	TMap<int, AActor*> spawnedBoardSeparators;
 

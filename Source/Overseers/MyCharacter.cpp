@@ -19,19 +19,19 @@ void AMyCharacter::BeginPlay()
 	if (!m_HasRecievedPlayerIndex)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MyCharacter Begin Play"));
-
+		
 		GetCharacterMovement()->JumpZVelocity = jumpStrength;
 
 		// Get the network manager
 		p_NetworkManager = Cast<AMyNetworkManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AMyNetworkManager::StaticClass()));
 
 		// Get a reference to the select looking at component
-		USelectLookingAt* selectLookingAt = FindComponentByClass<USelectLookingAt>();
+		p_SelectLookingAt = FindComponentByClass<USelectLookingAt>();
 
 		// Set the player Index
-		if (selectLookingAt != nullptr && p_NetworkManager != nullptr)
+		if (p_SelectLookingAt != nullptr && p_NetworkManager != nullptr)
 		{
-			selectLookingAt->SetCanSelectBelongingTo(p_NetworkManager->GetNextPlayerIndex());
+			p_SelectLookingAt->SetCanSelectBelongingTo(p_NetworkManager->GetNextPlayerIndex());
 			p_NetworkManager->IncrementNextPlayerIndex();
 		}
 
@@ -49,6 +49,9 @@ void AMyCharacter::Tick(float DeltaTime)
 	switch (playerMode)
 	{
 	case 0: // Grounded
+
+		p_SelectLookingAt->m_AllowSelect = false;
+
 		break;
 	case 1: // Oversight
 		if (currentAirDashBoost > 0)
@@ -73,12 +76,6 @@ void AMyCharacter::Tick(float DeltaTime)
 		OversightToGrounded(DeltaTime);
 		break;
 	}
-}
-
-// Called to bind functionality to input
-void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void AMyCharacter::MoveForward(float AxisValue)
@@ -249,6 +246,8 @@ void AMyCharacter::ToggleMode()
 			// Determine where to stop
 			SetOversightDescendTo();
 
+			p_SelectLookingAt->m_AllowSelect = false;
+
 			playerMode = 3;
 			break;
 		case 2:
@@ -274,6 +273,7 @@ void AMyCharacter::GroundedToOversight(float DeltaTime)
 		ResetMovementStates();
 		GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 		allowMovementInput = true;
+		p_SelectLookingAt->m_AllowSelect = true;
 	}
 }
 

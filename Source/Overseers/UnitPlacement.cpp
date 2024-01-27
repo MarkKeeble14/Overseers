@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "UnitPlacement.h"
+#include "Unit.h"
 
 // Sets default values for this component's properties
 UUnitPlacement::UUnitPlacement()
@@ -35,9 +36,9 @@ void UUnitPlacement::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	}
 }
 
-void UUnitPlacement::CreateUnit(UClass* unit)
+ACellOccupant* UUnitPlacement::CreateUnit(UClass* unit)
 {
-	if (p_UnitInHand != nullptr) return;
+	if (p_UnitInHand != nullptr) return nullptr;
 
 	FVector spawnPos = FVector::ZeroVector;
 	AActor* spawned = GetWorld()->SpawnActor(unit, &spawnPos);
@@ -45,6 +46,8 @@ void UUnitPlacement::CreateUnit(UClass* unit)
 	ACellOccupant* spawnedOccupant = Cast<ACellOccupant>(spawned);
 
 	PassUnitToHand(spawnedOccupant);
+
+	return spawnedOccupant;
 }
 
 void UUnitPlacement::PassUnitToHand(ACellOccupant* occupant)
@@ -58,21 +61,37 @@ void UUnitPlacement::PassUnitToHand(ACellOccupant* occupant)
 	p_UnitInHand->SetPlaced(false);
 }
 
-void UUnitPlacement::ConfirmInHandUnitPlacement()
+bool UUnitPlacement::ConfirmInHandUnitPlacement(UGridCell* cell)
 {
 	// If there is no unit in hand, no need to place unit (obviously)
-	if (p_UnitInHand == nullptr) return;
-
-	// Get the cell
-	UGridCell* cell = p_SelectLookingAt->GetSelectedGridCell();
+	if (p_UnitInHand == nullptr) return false;
 
 	// Make sure the cell is not already occupied
-	if (cell != nullptr && cell->GetIsOccupied()) return;
+	if (cell != nullptr && cell->GetIsOccupied()) return false;
 
 	// Set the occupant and remove it from the players hand
 	cell->SetCurrentOccupant(p_UnitInHand);
 	p_UnitInHand->SetPlaced(true);
 	p_UnitInHand = nullptr;
+
+	return true;
+}
+
+int UUnitPlacement::CancelInHandUnitPlacement()
+{
+	// If there is no unit in hand, no need to place unit (obviously)
+	if (p_UnitInHand == nullptr) return 0;
+
+	// Set the occupant and remove it from the players hand
+	AUnit* unit = Cast<AUnit>(p_UnitInHand);
+
+	if (unit == nullptr) return 0;
+
+	int value = unit->GetData().m_Rarity;
+	p_UnitInHand->Destroy();
+	p_UnitInHand = nullptr;
+
+	return value;
 }
 
 void UUnitPlacement::UpdateInHandUnitPlacement()
@@ -89,15 +108,15 @@ void UUnitPlacement::UpdateInHandUnitPlacement()
 	}
 }
 
-void UUnitPlacement::PickupUnit()
+bool UUnitPlacement::TryPickupUnit(UGridCell* cell)
 {
-	if (p_UnitInHand != nullptr) return;
-
-	UGridCell* cell = p_SelectLookingAt->GetSelectedGridCell();
+	if (p_UnitInHand != nullptr) return false;
 
 	if (cell != nullptr && cell->GetIsOccupied())
 	{
 		PassUnitToHand(cell->GetCurrentOccupant());
 		cell->SetCurrentOccupant(nullptr);
+		return true;
 	}
+	return false;
 }

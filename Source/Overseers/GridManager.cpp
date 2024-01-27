@@ -70,6 +70,8 @@ void UGridManager::MakeGrid(int playerId)
 		UGridCell* spawnedCell = spawned->GetComponentByClass<UGridCell>();
 		spawned->SetActorScale3D(cellScale);
 
+		spawnedCell->SetDefaultColor(color1);
+
 		IncrementBenchPosition(playerId, &spawnPos, gridSpacing, xDir, yDir);
 		spawnedBenchCells.Add(spawned);
 
@@ -77,7 +79,7 @@ void UGridManager::MakeGrid(int playerId)
 	}
 
 	// Insert newly spawned board into map
-	spawnedGrid.Add(playerId, BoardData{spawnedBoardCells, spawnedBenchCells});
+	spawnedGrid.Add(playerId, FBoardData{spawnedBoardCells, spawnedBenchCells});
 }
 
 void UGridManager::IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir)

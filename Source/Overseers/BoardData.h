@@ -2,22 +2,21 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "BoardData.generated.h"
 
-/**
- * 
- */
-class OVERSEERS_API BoardData
+USTRUCT(BlueprintType)
+struct OVERSEERS_API FBoardData
 {
-public:
-	BoardData();
-	~BoardData();
+    GENERATED_USTRUCT_BODY()
 
+public:
 	UPROPERTY()
 	TArray<AActor*> p_BoardCells;
 
 	UPROPERTY()
 	TArray<AActor*> p_BenchCells;
 
-	BoardData(TArray<AActor*> boardCells, TArray<AActor*> benchCells) : p_BoardCells(boardCells), p_BenchCells(benchCells) {}
+	FBoardData(TArray<AActor*> boardCells, TArray<AActor*> benchCells) : p_BoardCells(boardCells), p_BenchCells(benchCells) {}
+
+	FBoardData() {}
 };

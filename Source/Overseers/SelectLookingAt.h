@@ -9,7 +9,7 @@
 #include "SelectLookingAt.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS()
 class OVERSEERS_API USelectLookingAt : public UActorComponent
 {
 	GENERATED_BODY()
@@ -27,6 +27,8 @@ protected:
 	int m_CanSelectBelongingTo;
 
 public:	
+	bool m_AllowSelect;
+
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -38,7 +40,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool HasSomethingSelected() { return p_SelectedGridCell != nullptr; }
 
+	UFUNCTION(BlueprintCallable)
 	UGridCell* GetSelectedGridCell();
+
+	UFUNCTION(BlueprintCallable)
+	int TrySellUnitOnSelectedCell();
 private:
 	FHitResult p_HitResult;
 	FCollisionQueryParams p_QueryParams;

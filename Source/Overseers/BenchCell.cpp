@@ -4,6 +4,7 @@
 
 UBenchCell::UBenchCell()
 {
+	// m_CountsTowardsUnitMax = false;
 }
 
 UBenchCell::~UBenchCell()
