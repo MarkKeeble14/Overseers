@@ -17,4 +17,6 @@ class OVERSEERS_API UBenchCell : public UGridCell
 public:
 	UBenchCell();
 	~UBenchCell();
+
+	bool GetCountsTowardUnitMax() override { return false; }
 };

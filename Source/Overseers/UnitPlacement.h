@@ -36,13 +36,16 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	void ConfirmInHandUnitPlacement();
+	bool ConfirmInHandUnitPlacement(UGridCell* cell);
 
 	UFUNCTION(BlueprintCallable)
-	void PickupUnit();
+	int CancelInHandUnitPlacement();
 
 	UFUNCTION(BlueprintCallable)
-	void CreateUnit(UClass* unit);
+	bool TryPickupUnit(UGridCell* cell);
+
+	UFUNCTION(BlueprintCallable)
+	ACellOccupant* CreateUnit(UClass* unit);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsHandEmpty() { return p_UnitInHand == nullptr; }

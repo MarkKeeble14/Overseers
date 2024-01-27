@@ -4,19 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "CellOccupant.h"
-#include <PaperSprite.h>
 #include "Trait.h"
+#include "UnitInfo.h"
 #include "Unit.generated.h"
 
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class OVERSEERS_API AUnit : public ACellOccupant
 {
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere)
+	FUnitInfo data;
 
+	UFUNCTION(BlueprintCallable)
+	FUnitInfo GetData() { return data; }
 protected:
 };

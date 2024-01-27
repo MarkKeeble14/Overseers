@@ -2,6 +2,7 @@
 
 
 #include "SelectLookingAt.h"
+#include "Unit.h"
 
 // Sets default values for this component's properties
 USelectLookingAt::USelectLookingAt()
@@ -36,7 +37,16 @@ void USelectLookingAt::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	DoTrace();
+	if (m_AllowSelect)
+	{
+		DoTrace();
+	}
+	else
+	{
+		if (p_SelectedGridCell != nullptr)
+			p_SelectedGridCell->Deselect();
+		p_SelectedGridCell = nullptr;
+	}
 }
 
 bool USelectLookingAt::DoTrace()
@@ -102,4 +112,22 @@ bool USelectLookingAt::DoTrace()
 UGridCell* USelectLookingAt::GetSelectedGridCell()
 {
 	return p_SelectedGridCell;
+}
+
+int USelectLookingAt::TrySellUnitOnSelectedCell()
+{
+	if (p_SelectedGridCell == nullptr) return 0;
+
+	 ACellOccupant* occupant = p_SelectedGridCell->GetCurrentOccupant();
+	 if (occupant == nullptr) return 0;
+
+	 AUnit* unit = Cast<AUnit>(occupant);
+	 if (unit == nullptr) return 0;
+
+	 int value = unit->GetData().m_Rarity;
+
+	 unit->Destroy();
+	 p_SelectedGridCell->SetCurrentOccupant(nullptr);
+
+	 return value;
 }

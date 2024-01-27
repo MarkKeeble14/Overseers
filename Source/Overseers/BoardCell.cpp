@@ -4,6 +4,7 @@
 
 UBoardCell::UBoardCell()
 {
+	//
 }
 
 UBoardCell::~UBoardCell()

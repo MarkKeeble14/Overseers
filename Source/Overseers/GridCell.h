@@ -9,7 +9,7 @@
 #include "GridCell.generated.h"
 
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+UCLASS(BlueprintType)
 class OVERSEERS_API UGridCell : public UActorComponent, public ISelectable
 {
 	GENERATED_BODY()
@@ -17,7 +17,6 @@ class OVERSEERS_API UGridCell : public UActorComponent, public ISelectable
 public:
 	// Sets default values for this component's properties
 	UGridCell();
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -36,14 +35,21 @@ public:
 
 	virtual void Deselect() override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual bool GetCountsTowardUnitMax() { return true; }
+
 	void SetDefaultColor(FVector color);
 
+	UFUNCTION(BlueprintCallable)
 	bool GetIsOccupied();
 
+	UFUNCTION(BlueprintCallable)
 	ACellOccupant* GetCurrentOccupant();
 
+	UFUNCTION(BlueprintCallable)
 	void RemoveCurrentOccupant();
 
+	UFUNCTION(BlueprintCallable)
 	void SetCurrentOccupant(ACellOccupant* occupant);
 
 	void SwapOccupants(UGridCell* otherCell);

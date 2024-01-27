@@ -74,8 +74,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<AActor*> FoundActors;
 
-
 	AMyNetworkManager* p_NetworkManager;
+
+	// Select Looking At
+	USelectLookingAt* p_SelectLookingAt;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -107,9 +109,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
 	void MoveForward(float AxisValue);
