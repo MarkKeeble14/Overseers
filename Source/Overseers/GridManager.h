@@ -3,21 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "BoardData.h"
 #include "GridCell.h"
+#include "CharacterBoardVisuals.h"
 #include "GridManager.generated.h"
 
 /**
  * 
  */
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class OVERSEERS_API UGridManager : public UActorComponent
+UCLASS()
+class OVERSEERS_API AGridManager : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	UGridManager();
-	~UGridManager();
+	AGridManager();
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
 	UClass* boardCell;
@@ -41,19 +45,18 @@ public:
 	float gridCellHeightScale = .25;
 
 	UPROPERTY(EditAnywhere)
-	int testMatchupConfiguration = 0;
+	int m_StartingSeparatorConfig = 0;
 
 	UPROPERTY(EditAnywhere)
-	FVector color1 = FVector(.1, .1, .1);
-
-	UPROPERTY(EditAnywhere)
-	FVector color2 = FVector(.25, .25, .25);
+	TMap<int, FCharacterBoardVisuals> m_PlayerGridVisuals;
 
 	void MakeGrid(int playerId);
 
+	void SetupMatches(int config);
+protected:
+	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-protected:
 	TMap<int, FBoardData> spawnedGrid;
 
 	TMap<int, AActor*> spawnedBoardSeparators;
@@ -65,6 +68,4 @@ protected:
 	AActor* GetRespectiveBoardSeparator(int combatentId1, int combatentId2);
 
 	void SetBoardSeparatorState(bool active, AActor* separator);
-
-	void SetupMatches(int config);
 };

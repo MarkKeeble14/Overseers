@@ -2,15 +2,31 @@
 
 #include "GridManager.h"
 
-UGridManager::UGridManager()
+AGridManager::AGridManager()
 {
 }
 
-UGridManager::~UGridManager()
+void AGridManager::BeginPlay()
 {
+	Super::BeginPlay();
+
+	for (int i = 0; i < 4; i++)
+	{
+		MakeGrid(i);
+	}
+
+	SpawnBoardSeparators();
+
+	SetupMatches(m_StartingSeparatorConfig);
 }
 
-void UGridManager::MakeGrid(int playerId)
+// Called every frame
+void AGridManager::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void AGridManager::MakeGrid(int playerId)
 {
 	if (boardCell == nullptr || benchCell == nullptr) return;
 
@@ -41,8 +57,10 @@ void UGridManager::MakeGrid(int playerId)
 
 			// Set Color
 			UGridCell* spawnedCell = spawned->GetComponentByClass<UGridCell>();
-			if (spawnedCell != nullptr) 
-				spawnedCell->SetDefaultColor((i + p) % 2 == 0 ? color1 : color2);
+			if (spawnedCell != nullptr)
+			{
+				spawnedCell->SetDefaultColor((i + p) % 2 == 0 ? m_PlayerGridVisuals[playerId].m_Color1 : m_PlayerGridVisuals[playerId].m_Color2);
+			}
 
 			spawnedBoardCells.Add(spawned);
 
@@ -70,7 +88,7 @@ void UGridManager::MakeGrid(int playerId)
 		UGridCell* spawnedCell = spawned->GetComponentByClass<UGridCell>();
 		spawned->SetActorScale3D(cellScale);
 
-		spawnedCell->SetDefaultColor(color1);
+		spawnedCell->SetDefaultColor(m_PlayerGridVisuals[playerId].m_Color1);
 
 		IncrementBenchPosition(playerId, &spawnPos, gridSpacing, xDir, yDir);
 		spawnedBenchCells.Add(spawned);
@@ -82,7 +100,7 @@ void UGridManager::MakeGrid(int playerId)
 	spawnedGrid.Add(playerId, FBoardData{spawnedBoardCells, spawnedBenchCells});
 }
 
-void UGridManager::IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir)
+void AGridManager::IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir)
 {
 	switch (playerId)
 	{
@@ -103,7 +121,7 @@ void UGridManager::IncrementBenchPosition(int playerId, FVector* vec, float incB
 	}
 }
 
-void UGridManager::SpawnBoardSeparators()
+void AGridManager::SpawnBoardSeparators()
 {
 	if (boardSeparator == nullptr) return;
 
@@ -140,7 +158,7 @@ void UGridManager::SpawnBoardSeparators()
 	}
 }
 
-AActor* UGridManager::GetRespectiveBoardSeparator(int combatentId1, int combatentId2)
+AActor* AGridManager::GetRespectiveBoardSeparator(int combatentId1, int combatentId2)
 {
 	// Player Id 0
 	if (combatentId1 == 0 && combatentId2 == 1)
@@ -169,7 +187,7 @@ AActor* UGridManager::GetRespectiveBoardSeparator(int combatentId1, int combaten
 	return nullptr;
 }
 
-void UGridManager::SetupMatches(int config)
+void AGridManager::SetupMatches(int config)
 {
 	switch (config)
 	{
@@ -200,23 +218,9 @@ void UGridManager::SetupMatches(int config)
 	}
 }
 
-void UGridManager::SetBoardSeparatorState(bool active, AActor* separator)
+void AGridManager::SetBoardSeparatorState(bool active, AActor* separator)
 {
 	if (separator == nullptr) return;
 	separator->SetActorEnableCollision(!active);
 	separator->SetActorHiddenInGame(active);
-}
-
-void UGridManager::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	for (int i = 0; i < 4; i++)
-	{
-		MakeGrid(i);
-	}
-
-	SpawnBoardSeparators();
-
-	SetupMatches(testMatchupConfiguration);
 }

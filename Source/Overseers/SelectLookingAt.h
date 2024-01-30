@@ -35,8 +35,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	float selectionDistance = 100000;
 
-	void SetCanSelectBelongingTo(int canSelect) { m_CanSelectBelongingTo = canSelect; UE_LOG(LogTemp, Warning, TEXT("Can Select: %d"), m_CanSelectBelongingTo); }
-
 	UFUNCTION(BlueprintCallable)
 	bool HasSomethingSelected() { return p_SelectedGridCell != nullptr; }
 
@@ -45,6 +43,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int TrySellUnitOnSelectedCell();
+
+	UFUNCTION(BlueprintCallable)
+	void SetCanSelectBelongingTo(int canSelect) { m_CanSelectBelongingTo = canSelect; }
 private:
 	FHitResult p_HitResult;
 	FCollisionQueryParams p_QueryParams;

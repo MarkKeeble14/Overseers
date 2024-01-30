@@ -54,6 +54,9 @@ public:
 	// Mode Transitions
 	UPROPERTY(EditAnywhere)
 	float modeTransitionDelay = 0.5f;
+	
+	UPROPERTY(EditAnywhere)
+	float m_OversightToGroundedForceMultiplier = 100;
 
 	// Oversight
 	UPROPERTY(EditAnywhere)
@@ -61,20 +64,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float oversightAscendTo = 4000;
 	UPROPERTY(EditAnywhere)
-	float descendSpeed = 3250;
+	float m_AscendTransitionSpeedMult = 3;
 	UPROPERTY(EditAnywhere)
-	float defaultOversightDescendTo = 500;
-	UPROPERTY(EditAnywhere)
-	float foundGroundOversightDescendTo = 100;
-
-	// Network
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AActor> ClassToFind;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<AActor*> FoundActors;
-
-	AMyNetworkManager* p_NetworkManager;
+	float m_DescendTransitionSpeedMult = 7.5;
 
 	// Select Looking At
 	USelectLookingAt* p_SelectLookingAt;
@@ -87,8 +79,6 @@ protected:
 	
 	void GroundedToOversight(float DeltaTime);
 	void OversightToGrounded(float DeltaTime);
-
-	bool SetOversightDescendTo();
 
 	float currentAirDashBoost;
 
@@ -104,8 +94,6 @@ protected:
 	bool isCrouched;
 
 	int playerMode; // 0 = Grounded, 1 = Oversight, 2 = G -> O Transition. 3 -> O -> G Transition
-	
-	bool m_HasRecievedPlayerIndex;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
