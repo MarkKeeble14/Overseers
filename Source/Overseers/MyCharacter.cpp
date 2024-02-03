@@ -18,9 +18,6 @@ void AMyCharacter::BeginPlay()
 
 	UE_LOG(LogTemp, Warning, TEXT("MyCharacter Begin Play"));
 	GetCharacterMovement()->JumpZVelocity = jumpStrength;
-
-	// Get a reference to the select looking at component
-	p_SelectLookingAt = FindComponentByClass<USelectLookingAt>();
 }
 
 // Called every frame
@@ -33,9 +30,6 @@ void AMyCharacter::Tick(float DeltaTime)
 	switch (playerMode)
 	{
 		case 0: // Grounded
-
-			p_SelectLookingAt->m_AllowSelect = false;
-
 			break;
 		case 1: // Oversight
 			if (currentAirDashBoost > 0)
@@ -77,7 +71,10 @@ void AMyCharacter::MoveForward(float AxisValue)
 	}
 	else if (playerMode == 1) // Oversight
 	{
-		toMove = GetActorLocation() + GetActorForwardVector() * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1);
+		const FRotator rot(0, -90, 0);
+		FVector fwd = rot.RotateVector(GetActorRightVector());
+
+		toMove = GetActorLocation() + (fwd * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1));
 		toMove.Z = GetActorLocation().Z;
 		SetActorLocation(toMove, 0);
 	}
@@ -97,7 +94,9 @@ void AMyCharacter::MoveRight(float AxisValue)
 	}
 	else if (playerMode == 1) // Oversight
 	{
-		toMove = GetActorLocation() + GetActorRightVector() * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1);
+		FVector hori = GetActorRightVector();
+
+		toMove = GetActorLocation() + (hori * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1));
 		toMove.Z = GetActorLocation().Z;
 		SetActorLocation(toMove, 0);
 	}
@@ -193,8 +192,6 @@ void AMyCharacter::ToggleMode()
 			playerMode = 2;
 			break;
 		case 1: // Begin Oversight -> Grounded
-			p_SelectLookingAt->m_AllowSelect = false;
-
 			allowMovementInput = false;
 			modeTransitionDelayTimer = modeTransitionDelay;
 			currentTransitionTime = 0;
@@ -224,7 +221,6 @@ void AMyCharacter::GroundedToOversight(float DeltaTime)
 		ResetMovementStates();
 		GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 		allowMovementInput = true;
-		p_SelectLookingAt->m_AllowSelect = true;
 	}
 }
 

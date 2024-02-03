@@ -22,6 +22,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(Replicated)
+	bool m_GameBegun;
+
+	UPROPERTY(Replicated)
 	int m_CurrentRoundNumber;
 
 	UPROPERTY(Replicated)
@@ -54,6 +57,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CombatConcluded();
+
+	UFUNCTION(BlueprintCallable)
+	void BeginGame() { m_GameBegun = true; }
 
 	UFUNCTION(BlueprintCallable)
 	float GetPlanningRoundTimer() { return m_PlanningRoundTimer; }

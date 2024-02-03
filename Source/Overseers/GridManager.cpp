@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GridManager.h"
+#include "GridCell.h"
 
 AGridManager::AGridManager()
 {
@@ -44,8 +45,8 @@ void AGridManager::MakeGrid(int playerId)
 
 	const FVector cellScale = FVector(gridSpacing / 100, gridSpacing / 100, gridCellHeightScale);
 	AActor* spawned = nullptr;
-	TArray<AActor*> spawnedBoardCells;
-	TArray<AActor*> spawnedBenchCells;
+	TArray<UGridCell*> spawnedBoardCells;
+	TArray<UGridCell*> spawnedBenchCells;
 
 	// Spawn Cells
 	for (int i = 0; i < boardSize; i++)
@@ -62,7 +63,7 @@ void AGridManager::MakeGrid(int playerId)
 				spawnedCell->SetDefaultColor((i + p) % 2 == 0 ? m_PlayerGridVisuals[playerId].m_Color1 : m_PlayerGridVisuals[playerId].m_Color2);
 			}
 
-			spawnedBoardCells.Add(spawned);
+			spawnedBoardCells.Add(spawnedCell);
 
 			// Set owned by
 			spawnedCell->SetOwnedByPlayerId(playerId);
@@ -91,7 +92,7 @@ void AGridManager::MakeGrid(int playerId)
 		spawnedCell->SetDefaultColor(m_PlayerGridVisuals[playerId].m_Color1);
 
 		IncrementBenchPosition(playerId, &spawnPos, gridSpacing, xDir, yDir);
-		spawnedBenchCells.Add(spawned);
+		spawnedBenchCells.Add(spawnedCell);
 
 		spawnedCell->SetOwnedByPlayerId(playerId);
 	}
@@ -155,6 +156,27 @@ void AGridManager::SpawnBoardSeparators()
 		spawned = GetWorld()->SpawnActor(boardSeparator, &spawnPos, &spawnRot);
 		spawned->SetActorScale3D(wallScale);
 		spawnedBoardSeparators.Add(i, spawned);
+	}
+}
+
+void AGridManager::ClearBoard()
+{
+	UGridCell* gridCell;
+	for (TPair<int, FBoardData>& pair : spawnedGrid)
+	{
+		for (int i = 0; i < pair.Value.p_BoardCells.Num(); i++) {
+			gridCell = pair.Value.p_BoardCells[i];
+			if (gridCell == nullptr)
+				continue;
+			gridCell->Clear();
+		}
+
+		for (int i = 0; i < pair.Value.p_BenchCells.Num(); i++) {
+			gridCell = pair.Value.p_BenchCells[i];
+			if (gridCell == nullptr)
+				continue;
+			gridCell->Clear();
+		}
 	}
 }
 

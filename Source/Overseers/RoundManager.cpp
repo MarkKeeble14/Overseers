@@ -56,6 +56,8 @@ void ARoundManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!m_GameBegun) return;
+
 	if (IsCurrentRoundCompleted(DeltaTime))
 	{
 		NextRound();

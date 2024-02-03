@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MyCharacter.h"
 #include "CellOccupant.generated.h"
+
+class UGridCell;
 
 UCLASS()
 class OVERSEERS_API ACellOccupant : public AActor
@@ -32,9 +35,29 @@ protected:
 
 	bool m_Placed;
 
+	AMyCharacter* p_BelongsTo;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void SetPlaced(bool b);
+
+	void SetScale(float scale);
+
+	void SetDefaultScale();
+
+	void Align();
+
+	void Align(AActor* actor);
+
+	void Remove();
+
+	void SetBelongsTo(AMyCharacter* character) { p_BelongsTo = character; }
+
+	UGridCell* GetCellUnderneath();
+private:
+	FHitResult p_HitResult;
+	FCollisionQueryParams p_QueryParams;
+	FCollisionObjectQueryParams p_ObjectQueryParams;
 };

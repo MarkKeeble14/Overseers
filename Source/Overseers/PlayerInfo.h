@@ -11,14 +11,14 @@ struct OVERSEERS_API FPlayerInfo
     
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int m_PlayerLevel;
+    int m_PlayerLevel = 1;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int m_CurrentXP;
+    int m_CurrentXP = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int m_XPForLevelUp;
+    int m_XPForLevelUp = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int m_CurrentGold;
+    int m_CurrentGold = 0;
 };

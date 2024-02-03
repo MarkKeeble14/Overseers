@@ -11,8 +11,8 @@ struct OVERSEERS_API FCharacterBoardVisuals
 
 public:
 	UPROPERTY(EditAnywhere)
-	FVector m_Color1;
+	FVector m_Color1 = FVector(0.1, 0.1, 0.1);
 
 	UPROPERTY(EditAnywhere)
-	FVector m_Color2;
+	FVector m_Color2 = FVector(0.25, 0.25, 0.25);
 };

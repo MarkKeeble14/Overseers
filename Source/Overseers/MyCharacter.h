@@ -9,9 +9,8 @@
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
 #include "MyNetworkManager.h"
-#include "SelectLookingAt.h"
 #include <Kismet/GameplayStatics.h>
-
+#include "GridManager.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -68,8 +67,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float m_DescendTransitionSpeedMult = 7.5;
 
-	// Select Looking At
-	USelectLookingAt* p_SelectLookingAt;
+	// References
+	AGridManager* p_GridManager;
+
+	int m_PlayerId = 0;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -127,4 +128,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetPlayerMode() { return playerMode; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetGridManager(AGridManager* gridManager) { p_GridManager = gridManager; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerId(int id) { m_PlayerId = id; }
+
+	UFUNCTION(BlueprintCallable)
+	int GetPlayerId() { return m_PlayerId; }
+
+	FBoardData* GetPlayerBoardData() { return p_GridManager->GetPlayerBoardData(m_PlayerId); }
 };

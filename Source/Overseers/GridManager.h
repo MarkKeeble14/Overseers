@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BoardData.h"
-#include "GridCell.h"
 #include "CharacterBoardVisuals.h"
 #include "GridManager.generated.h"
 
@@ -53,6 +52,12 @@ public:
 	void MakeGrid(int playerId);
 
 	void SetupMatches(int config);
+
+	FBoardData* GetPlayerBoardData(int playerId) 
+	{
+		if (!spawnedGrid.Contains(playerId)) return nullptr;
+		return &spawnedGrid[playerId]; 
+	}
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -64,6 +69,9 @@ protected:
 	void IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir);
 
 	void SpawnBoardSeparators();
+
+	UFUNCTION(BlueprintCallable)
+	void ClearBoard();
 
 	AActor* GetRespectiveBoardSeparator(int combatentId1, int combatentId2);
 
