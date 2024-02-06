@@ -10,6 +10,7 @@
  */
 UENUM(BlueprintType)
 enum class ETrait : uint8 {
+    T_None          UMETA(DisplayName = "None"),
     T_Fire          UMETA(DisplayName = "Fire"),
     T_Water         UMETA(DisplayName = "Water"),
     T_Air           UMETA(DisplayName = "Air"),

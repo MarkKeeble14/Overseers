@@ -16,7 +16,7 @@ public:
     FString m_Name;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int m_Rarity;
+    int m_Rarity = 1;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UPaperSprite* m_SpriteImage;

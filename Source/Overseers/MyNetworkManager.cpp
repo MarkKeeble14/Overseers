@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "MyNetworkManager.h"
+#include <Net/UnrealNetwork.h>
 
 // Sets default values
 AMyNetworkManager::AMyNetworkManager()
@@ -22,6 +22,11 @@ void AMyNetworkManager::BeginPlay()
 void AMyNetworkManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AMyNetworkManager::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	DOREPLIFETIME(AMyNetworkManager, Owner);
 }
 
 void AMyNetworkManager::IncrementNextPlayerIndex()

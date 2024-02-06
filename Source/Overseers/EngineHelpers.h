@@ -15,4 +15,8 @@ public:
 
 	template<typename T>
 	static void FindAllActors(UWorld* world, TArray<T*>& out);
+
+	static FVector GetPositionToPlaceActorAboveActor(AActor* a1, AActor* a2);
+
+	static void AlignActorAboveActor(AActor* a1, AActor* a2);
 };

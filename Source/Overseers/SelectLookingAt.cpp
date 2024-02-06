@@ -85,7 +85,7 @@ bool USelectLookingAt::DoTrace()
 				p_SelectedGridCell->Deselect();
 			p_SelectedGridCell = nullptr;
 		}
-		else if (gridCell->GetOwnedByPlayerId() == m_CanSelectBelongingTo)
+		else if (gridCell->GetOwnedByPlayerId() == m_SelectingFor->GetPlayerId())
 		{
 			if (p_SelectedGridCell != nullptr)
 				p_SelectedGridCell->Deselect();
@@ -112,22 +112,4 @@ bool USelectLookingAt::DoTrace()
 UGridCell* USelectLookingAt::GetSelectedGridCell()
 {
 	return p_SelectedGridCell;
-}
-
-int USelectLookingAt::TrySellUnitOnSelectedCell()
-{
-	if (p_SelectedGridCell == nullptr) return 0;
-
-	 ACellOccupant* occupant = p_SelectedGridCell->GetCurrentOccupant();
-	 if (occupant == nullptr) return 0;
-
-	 AUnit* unit = Cast<AUnit>(occupant);
-	 if (unit == nullptr) return 0;
-
-	 int value = unit->GetData().m_Rarity;
-
-	 unit->Destroy();
-	 p_SelectedGridCell->SetCurrentOccupant(nullptr);
-
-	 return value;
 }

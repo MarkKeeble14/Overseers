@@ -18,5 +18,7 @@ public:
 	UBenchCell();
 	~UBenchCell();
 
+	bool CountsTowardsUnitCap() override { return false; }
+
 	bool GetCountsTowardUnitMax() override { return false; }
 };

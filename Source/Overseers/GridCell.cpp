@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "GridCell.h"
+#include "EngineHelpers.h"
 
 // Sets default values for this component's properties
 UGridCell::UGridCell()
@@ -75,8 +75,8 @@ void UGridCell::SetCurrentOccupant(ACellOccupant* occupant)
 		return;
 	}
 
-	AlignOccupantToCell(occupant);
 	p_CurrentOccupant = occupant;
+	EngineHelpers::AlignActorAboveActor(p_CurrentOccupant, GetOwner());
 }
 
 void UGridCell::SwapOccupants(UGridCell* otherCell)
@@ -84,27 +84,8 @@ void UGridCell::SwapOccupants(UGridCell* otherCell)
 	// ?
 }
 
-void UGridCell::AlignOccupantToCell(ACellOccupant* occupant)
+void UGridCell::Clear()
 {
-	// Make variables
-	FVector location;
-	FVector bounds;
-	FVector alignedPos;
-
-	// Get the actor bounds of the cell
-	GetOwner()->GetActorBounds(true, location, bounds);
-
-	// Set the spawn position to be the cellLocation plus the number of units from the center to the top of the cell
-	alignedPos = location + bounds.Z / 2;
-
-	// Get the actor bounds of the unit
-	occupant->GetActorBounds(true, location, bounds);
-
-	// Move the spawn position up by the number of units from the center of the unit to the top of the unit
-	alignedPos += FVector(0, 0, bounds.Z);
-
-	// Set the location and scale of the unit
-	occupant->SetActorLocation(alignedPos);
-	int actorScale = GetOwner()->GetActorScale3D().X;
-	occupant->SetActorScale3D(FVector(actorScale, actorScale, actorScale));
+	if (p_CurrentOccupant == nullptr) return;
+	p_CurrentOccupant->Remove();
 }

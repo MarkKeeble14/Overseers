@@ -7,6 +7,7 @@
 #include "SelectLookingAt.h"
 #include "Selectable.h"
 #include "GridCell.h"
+#include "GridManager.h"
 #include "UnitPlacement.generated.h"
 
 
@@ -22,6 +23,8 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	AMyCharacter* p_PlacingFor;
 
 	ACellOccupant* p_UnitInHand;
 
@@ -45,8 +48,22 @@ public:
 	bool TryPickupUnit(UGridCell* cell);
 
 	UFUNCTION(BlueprintCallable)
+	int TrySellUnit(UGridCell* cell);
+
+	UFUNCTION(BlueprintCallable)
 	ACellOccupant* CreateUnit(UClass* unit);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsHandEmpty() { return p_UnitInHand == nullptr; }
+
+	UFUNCTION(BlueprintCallable)
+	int GetNumUnitsPlaced() 
+	{ 
+		FBoardData* boardData = p_PlacingFor->GetPlayerBoardData();
+		if (boardData == nullptr) return 0;
+		return boardData->GetNumUnitsOnBoard();
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlacingFor(AMyCharacter* character) { p_PlacingFor = character; }
 };

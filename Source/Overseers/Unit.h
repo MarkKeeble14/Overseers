@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "CellOccupant.h"
-#include "Trait.h"
 #include "UnitInfo.h"
 #include "Unit.generated.h"
 
@@ -22,5 +21,22 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FUnitInfo GetData() { return data; }
+
+	void IncrementStage();
+
+	UFUNCTION(BlueprintCallable)
+	int GetStage() { return m_Stage; }
+
+	UFUNCTION(BlueprintCallable)
+	int GetValue() { return FMath::Pow((float)data.m_Rarity, (float)m_Stage + 1); }
+
+	// Uses Stage
+	void SetScaleBasedOnStage();
+
+	void Combine(AUnit* combineWith1, AUnit* combineWith2);
 protected:
+private:
+	int m_Stage = 1;
+
+	int m_MaxStage = 3;
 };

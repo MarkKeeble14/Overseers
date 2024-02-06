@@ -35,6 +35,8 @@ public:
 
 	virtual void Deselect() override;
 
+	virtual bool CountsTowardsUnitCap() { return true; };
+
 	UFUNCTION(BlueprintCallable)
 	virtual bool GetCountsTowardUnitMax() { return true; }
 
@@ -54,9 +56,11 @@ public:
 
 	void SwapOccupants(UGridCell* otherCell);
 
-	void AlignOccupantToCell(ACellOccupant* occupant);
-
 	void SetOwnedByPlayerId(int playerId) { m_OwnedByPlayerId = playerId; }
 
 	int GetOwnedByPlayerId() { return m_OwnedByPlayerId; }
+
+	float GetCellScale() { return GetOwner()->GetActorScale3D().X; }
+
+	void Clear();
 };

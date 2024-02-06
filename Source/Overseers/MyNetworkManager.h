@@ -19,16 +19,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(Replicated)
 	int m_NextPlayerIndex = 0;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	int GetNextPlayerIndex()
-	{
-		return m_NextPlayerIndex;
-	}
+	UFUNCTION(BlueprintCallable)
+	int GetNextPlayerIndex() { return m_NextPlayerIndex; }
 
+	UFUNCTION(BlueprintCallable)
 	void IncrementNextPlayerIndex();
 };

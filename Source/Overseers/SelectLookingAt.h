@@ -9,7 +9,7 @@
 #include "SelectLookingAt.generated.h"
 
 
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class OVERSEERS_API USelectLookingAt : public UActorComponent
 {
 	GENERATED_BODY()
@@ -22,20 +22,12 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	bool DoTrace();
-
-	int m_CanSelectBelongingTo;
-
 public:	
-	bool m_AllowSelect;
-
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere)
 	float selectionDistance = 100000;
-
-	void SetCanSelectBelongingTo(int canSelect) { m_CanSelectBelongingTo = canSelect; UE_LOG(LogTemp, Warning, TEXT("Can Select: %d"), m_CanSelectBelongingTo); }
 
 	UFUNCTION(BlueprintCallable)
 	bool HasSomethingSelected() { return p_SelectedGridCell != nullptr; }
@@ -44,8 +36,17 @@ public:
 	UGridCell* GetSelectedGridCell();
 
 	UFUNCTION(BlueprintCallable)
-	int TrySellUnitOnSelectedCell();
+	void SetSelectingFor(AMyCharacter* character) { m_SelectingFor = character; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetAllowSelect(bool b) { m_AllowSelect = b; }
 private:
+	AMyCharacter* m_SelectingFor;
+
+	bool m_AllowSelect;
+
+	bool DoTrace();
+
 	FHitResult p_HitResult;
 	FCollisionQueryParams p_QueryParams;
 	FCollisionObjectQueryParams p_ObjectQueryParams;
