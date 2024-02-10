@@ -13,7 +13,7 @@ struct OVERSEERS_API FBoardTraitMap
 	GENERATED_USTRUCT_BODY()
 
 private:
-
+	AMyCharacter* p_Representing;
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<ETrait, int> m_TraitCounts;
@@ -21,4 +21,8 @@ public:
 	ETrait Add(ETrait trait);
 
 	ETrait Remove(ETrait trait);
+
+	void AttachCharacter(AMyCharacter* character) { p_Representing = character; }
+
+	void LogState();
 };

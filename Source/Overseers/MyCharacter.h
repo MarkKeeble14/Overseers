@@ -11,7 +11,11 @@
 #include "MyNetworkManager.h"
 #include <Kismet/GameplayStatics.h>
 #include "GridManager.h"
+#include "TraitsManager.h"
 #include "MyCharacter.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTraitAddedToBoardSignature, ETrait, trait);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTraitRemovedFromBoardSignature, ETrait, trait);
 
 UCLASS()
 class OVERSEERS_API AMyCharacter : public ACharacter
@@ -38,7 +42,7 @@ public:
 	float oversightBaseFlySpeed = 10;
 	UPROPERTY(EditAnywhere)
 	float oversightBoostedFlySpeed = 20;
-	
+
 	UPROPERTY(EditAnywhere)
 	float airDashMaxBoost = 5;
 	UPROPERTY(EditAnywhere)
@@ -53,7 +57,7 @@ public:
 	// Mode Transitions
 	UPROPERTY(EditAnywhere)
 	float modeTransitionDelay = 0.5f;
-	
+
 	UPROPERTY(EditAnywhere)
 	float m_OversightToGroundedForceMultiplier = 100;
 
@@ -70,6 +74,8 @@ public:
 	// References
 	AGridManager* p_GridManager;
 
+	ATraitsManager* p_TraitsManager;
+
 	int m_PlayerId = 0;
 protected:
 	// Called when the game starts or when spawned
@@ -77,7 +83,7 @@ protected:
 
 	void UpdateSpeed();
 	void ResetMovementStates();
-	
+
 	void GroundedToOversight(float DeltaTime);
 	void OversightToGrounded(float DeltaTime);
 
@@ -95,7 +101,7 @@ protected:
 	bool isCrouched;
 
 	int playerMode; // 0 = Grounded, 1 = Oversight, 2 = G -> O Transition. 3 -> O -> G Transition
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -130,13 +136,24 @@ public:
 	int GetPlayerMode() { return playerMode; }
 
 	UFUNCTION(BlueprintCallable)
-	void SetGridManager(AGridManager* gridManager) { p_GridManager = gridManager; }
-
-	UFUNCTION(BlueprintCallable)
 	void SetPlayerId(int id) { m_PlayerId = id; }
 
 	UFUNCTION(BlueprintCallable)
 	int GetPlayerId() { return m_PlayerId; }
 
 	FBoardData* GetPlayerBoardData() { return p_GridManager->GetPlayerBoardData(m_PlayerId); }
+
+	UFUNCTION(BlueprintCallable)
+	void SetGridManager(AGridManager* gridManager) { p_GridManager = gridManager; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetTraitsManager(ATraitsManager* traitsManager) { p_TraitsManager = traitsManager; }
+
+	UPROPERTY(BlueprintAssignable)
+	FOnTraitAddedToBoardSignature OnTraitAddedToBoard;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnTraitRemovedFromBoardSignature OnTraitRemovedFromBoard;
+
+	bool DidChangeTraitBreakpointRegion(ETrait trait, int previous, int current);
 };

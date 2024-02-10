@@ -23,9 +23,9 @@ public:
 
 	FBoardUnitStageMapping() {}
 
-	void Add(AUnit* unit);
+	void Add(AUnit* unit, int addTo);
 
 	void Remove(AUnit* unit, int removeFrom);
 
-	int GetTotalNumOfUnit();
+	int GetNumberOfUnits();
 };

@@ -51,7 +51,7 @@ public:
 
 	void Align(AActor* actor);
 
-	void Remove();
+	void Remove(bool removeFromBoard);
 
 	void SetBelongsTo(AMyCharacter* character) { p_BelongsTo = character; }
 

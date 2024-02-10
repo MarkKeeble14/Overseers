@@ -59,6 +59,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetNumUnitsPlaced() 
 	{ 
+		if (p_PlacingFor == nullptr) return 0;
 		FBoardData* boardData = p_PlacingFor->GetPlayerBoardData();
 		if (boardData == nullptr) return 0;
 		return boardData->GetNumUnitsOnBoard();

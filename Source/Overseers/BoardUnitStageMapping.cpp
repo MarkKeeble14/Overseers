@@ -7,17 +7,15 @@ FBoardUnitStageMapping::FBoardUnitStageMapping(TArray<AUnit*> units)
 {
 	for (auto it : units)
 	{
-		Add(it);
+		Add(it, it->GetStage());
 	}
 }
 
-void FBoardUnitStageMapping::Add(AUnit* unit)
+void FBoardUnitStageMapping::Add(AUnit* unit, int addTo)
 {
-	if (m_UnitsOfEachStage.Contains(unit->GetStage()))
+	if (m_UnitsOfEachStage.Contains(addTo))
 	{
-		m_UnitsOfEachStage[unit->GetStage()].Add(unit);
-	
-		UE_LOG(LogTemp, Warning, TEXT("Num %s in Array: %d (stage %d)"), *unit->GetData().m_Name, m_UnitsOfEachStage[unit->GetStage()].Num(), unit->GetStage());
+		m_UnitsOfEachStage[addTo].Add(unit);
 
 		// if there 3 of the same units that are the same stage, we combine
 		if (m_UnitsOfEachStage[unit->GetStage()].Num() == 3 && unit->GetStage() < 3)
@@ -31,9 +29,7 @@ void FBoardUnitStageMapping::Add(AUnit* unit)
 	}
 	else
 	{
-		m_UnitsOfEachStage.Add(unit->GetStage(), FBoardUnitList({ unit }));
-
-		UE_LOG(LogTemp, Warning, TEXT("Num %s in Array: %d (stage %d)"), *unit->GetData().m_Name, m_UnitsOfEachStage[unit->GetStage()].Num(), unit->GetStage());
+		m_UnitsOfEachStage.Add(addTo, FBoardUnitList({ unit }));
 	}
 }
 
@@ -42,7 +38,7 @@ void FBoardUnitStageMapping::Remove(AUnit* unit, int removeFrom)
 	m_UnitsOfEachStage[removeFrom].Remove(unit);
 }
 
-int FBoardUnitStageMapping::GetTotalNumOfUnit()
+int FBoardUnitStageMapping::GetNumberOfUnits()
 {
 	int i = 0;
 	for (const TPair<int, FBoardUnitList>& pair : m_UnitsOfEachStage)

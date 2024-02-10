@@ -87,5 +87,5 @@ void UGridCell::SwapOccupants(UGridCell* otherCell)
 void UGridCell::Clear()
 {
 	if (p_CurrentOccupant == nullptr) return;
-	p_CurrentOccupant->Remove();
+	p_CurrentOccupant->Remove(true);
 }
