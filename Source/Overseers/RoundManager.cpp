@@ -2,6 +2,7 @@
 
 
 #include "RoundManager.h"
+#include "CombatManager.h"
 #include <Net/UnrealNetwork.h>
 
 // Sets default values
@@ -9,6 +10,7 @@ ARoundManager::ARoundManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 	bReplicates = true;
 
 	m_CombatSeparatorState = 0;
@@ -28,6 +30,8 @@ void ARoundManager::BeginPlay()
 void ARoundManager::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
 	DOREPLIFETIME(ARoundManager, Owner);
+
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 bool ARoundManager::IsCurrentRoundCompleted(float DeltaTime)
@@ -60,6 +64,8 @@ void ARoundManager::Tick(float DeltaTime)
 
 	if (IsCurrentRoundCompleted(DeltaTime))
 	{
+		p_CombatManager->Reset();
+
 		NextRound();
 	}
 }
@@ -80,9 +86,23 @@ void ARoundManager::NextRound()
 			m_CombatsActive = 2;
 
 			p_GridManager->SetupMatches(m_CombatSeparatorState);
+			if (m_CombatSeparatorState == 0)
+			{
+				//
+				p_CombatManager->SetupMatch(0, 1);
+				p_CombatManager->SetupMatch(2, 3);
+			}
+			else
+			{
+				// 
+				p_CombatManager->SetupMatch(0, 3);
+				p_CombatManager->SetupMatch(1, 2);
+			}
 			m_CombatSeparatorState++;
 			if (m_CombatSeparatorState > 1)
+			{
 				m_CombatSeparatorState = 0;
+			}
 			break;
 		default:
 			break;

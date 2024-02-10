@@ -11,11 +11,6 @@ void AGridManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for (int i = 0; i < 4; i++)
-	{
-		MakeGrid(i);
-	}
-
 	SpawnBoardSeparators();
 
 	SetupMatches(m_StartingSeparatorConfig);
@@ -98,7 +93,12 @@ void AGridManager::MakeGrid(int playerId)
 	}
 
 	// Insert newly spawned board into map
-	spawnedGrid.Add(playerId, FBoardData{spawnedBoardCells, spawnedBenchCells});
+	spawnedGrid.Add(playerId, FBoardData{spawnedBoardCells, spawnedBenchCells, playerId, this});
+}
+
+void AGridManager::AttachPlayerToBoardData(int playerId, AMyCharacter* character)
+{
+	spawnedGrid[playerId].AttatchPlayer(character);
 }
 
 void AGridManager::IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir)
@@ -213,24 +213,24 @@ void AGridManager::SetupMatches(int config)
 {
 	switch (config)
 	{
-		case 0:
+		case 0: // 0 vs 1, 2 vs 3 
 			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(0, 1));
 			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(3, 2));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(0, 3));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(1, 2));
 			break;
-		case 1:
+		case 1: // 0 vs 3, 1 vs 2
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(0, 1));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(3, 2));
 			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(0, 3));
 			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(1, 2));
 			break;
-		case 2:
+		case 2: // All Blocked
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(0, 1));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(3, 2));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(0, 3));
 			SetBoardSeparatorState(true, GetRespectiveBoardSeparator(1, 2));
-		case 3:
+		case 3: // None Blocked
 			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(0, 1));
 			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(3, 2));
 			SetBoardSeparatorState(false, GetRespectiveBoardSeparator(0, 3));

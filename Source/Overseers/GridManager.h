@@ -49,14 +49,25 @@ public:
 	UPROPERTY(EditAnywhere)
 	TMap<int, FCharacterBoardVisuals> m_PlayerGridVisuals;
 
-	void MakeGrid(int playerId);
-
 	void SetupMatches(int config);
 
 	FBoardData* GetPlayerBoardData(int playerId) 
 	{
 		if (!spawnedGrid.Contains(playerId)) return nullptr;
 		return &spawnedGrid[playerId]; 
+	}
+
+	UFUNCTION(BlueprintCallable)
+	FBoardData GetCopyOfPlayerBoardData(int playerId)
+	{
+		if (!spawnedGrid.Contains(playerId)) return FBoardData();
+		return *GetPlayerBoardData(playerId);
+	}
+
+	UFUNCTION(BlueprintCallable)
+	int GetPlayerSpawnPosition()
+	{
+		return boardSize * gridSpacing * 0.9;
 	}
 protected:
 	// Called when the game starts or when spawned
@@ -70,10 +81,16 @@ protected:
 
 	void SpawnBoardSeparators();
 
-	UFUNCTION(BlueprintCallable)
-	void ClearBoard();
-
 	AActor* GetRespectiveBoardSeparator(int combatentId1, int combatentId2);
 
 	void SetBoardSeparatorState(bool active, AActor* separator);
+
+	UFUNCTION(BlueprintCallable)
+	void ClearBoard();
+
+	UFUNCTION(BlueprintCallable)
+	void MakeGrid(int playerId);
+
+	UFUNCTION(BlueprintCallable)
+	void AttachPlayerToBoardData(int playerId, AMyCharacter* character);
 };

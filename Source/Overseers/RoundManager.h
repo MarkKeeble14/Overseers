@@ -8,6 +8,8 @@
 #include "GridManager.h"
 #include "RoundManager.generated.h"
 
+class ACombatManager;
+
 UCLASS()
 class OVERSEERS_API ARoundManager : public AActor
 {
@@ -17,6 +19,9 @@ public:
 	// Sets default values for this actor's properties
 	ARoundManager();
 
+	AGridManager* p_GridManager;
+
+	ACombatManager* p_CombatManager;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,15 +50,9 @@ protected:
 	bool IsCurrentRoundCompleted(float DeltaTime);
 
 	void NextRound();
-
-	AGridManager* p_GridManager;
-
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	
-	UFUNCTION(BlueprintCallable)
-	void SetGridManager(AGridManager* GridManager) { p_GridManager = GridManager; }
+	virtual void Tick(float DeltaTime) override;	
 
 	UFUNCTION(BlueprintCallable)
 	void CombatConcluded();
@@ -66,4 +65,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ERoundType GetCurrentRoundType() { return m_CurrentRoundType; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetGridManager(AGridManager* GridManager) { p_GridManager = GridManager; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetCombatManager(ACombatManager* combatManager) { p_CombatManager = combatManager; }
 };

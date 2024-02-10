@@ -111,7 +111,7 @@ UGridCell* ACellOccupant::GetCellUnderneath()
 	return nullptr;
 }
 
-void ACellOccupant::Remove()
+void ACellOccupant::Remove(bool removeFromBoard)
 {
 	UGridCell* cell = GetCellUnderneath();
 	if (cell == nullptr)
@@ -123,11 +123,11 @@ void ACellOccupant::Remove()
 	{
 		cell->SetCurrentOccupant(nullptr);
 
-		AUnit* unit = Cast<AUnit>(this);
-		if (unit != nullptr)
+		if (removeFromBoard)
 		{
+			AUnit* unit = Cast<AUnit>(this);
 			FBoardData* boardData = p_BelongsTo->GetPlayerBoardData();
-			boardData->RemoveUnitFromBoard(unit, unit->GetStage());
+			boardData->RemoveUnitFromBoard(unit);
 		}
 
 		Destroy();

@@ -27,6 +27,8 @@ void AMyNetworkManager::Tick(float DeltaTime)
 void AMyNetworkManager::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
 	DOREPLIFETIME(AMyNetworkManager, Owner);
+
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 void AMyNetworkManager::IncrementNextPlayerIndex()

@@ -16,7 +16,6 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("MyCharacter Begin Play"));
 	GetCharacterMovement()->JumpZVelocity = jumpStrength;
 }
 
@@ -245,4 +244,30 @@ void AMyCharacter::ResetMovementStates()
 	isSprinting = false;
 	isCrouched = false;
 	UpdateSpeed();
+}
+
+bool AMyCharacter::DidChangeTraitBreakpointRegion(ETrait trait, int previous, int current)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Did Change Trait Breakpoint Region Called: (%d, %d)"), previous, current);
+
+	if (p_TraitsManager == nullptr)
+	{
+		return false;
+	}
+
+	if (previous > current)
+	{
+		// Decreased
+		int lastBreakpoint = p_TraitsManager->GetLastBreakpoint(trait, previous);
+		return lastBreakpoint == current;
+	}
+	else if (current > previous)
+	{
+		// Increased
+		if (p_TraitsManager->IsMaxBreakpoint(trait, current)) return false;
+		int nextBreakpoint = p_TraitsManager->GetNextBreakpoint(trait, previous);
+		return nextBreakpoint == current;
+	}
+
+	return false;
 }

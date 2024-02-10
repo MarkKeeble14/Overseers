@@ -87,8 +87,8 @@ void UUnitPlacement::PassUnitToHand(ACellOccupant* occupant)
 		UE_LOG(LogTemp, Warning, TEXT("Attempted to pass a null unit to hand"));
 		return;
 	}
+	occupant->SetPlaced(false);
 	p_UnitInHand = occupant;
-	p_UnitInHand->SetPlaced(false);
 }
 
 bool UUnitPlacement::ConfirmInHandUnitPlacement(UGridCell* cell)
@@ -192,7 +192,7 @@ bool UUnitPlacement::TryPickupUnit(UGridCell* cell)
 		if (unit != nullptr)
 		{
 			FBoardData* boardData = p_PlacingFor->GetPlayerBoardData();
-			boardData->RemoveUnitFromBoard(unit, unit->GetStage());
+			boardData->RemoveUnitFromBoard(unit);
 		}
 
 		// Set the cell to have no occupant now that we have picked it up
@@ -224,7 +224,7 @@ int UUnitPlacement::TrySellUnit(UGridCell* cell)
 	{
 		// Remove unit from board
 		FBoardData* boardData = p_PlacingFor->GetPlayerBoardData();
-		boardData->RemoveUnitFromBoard(unit, unit->GetStage());
+		boardData->RemoveUnitFromBoard(unit);
 
 		// if the occupant is a unit, it has some value
 		value = unit->GetValue();
