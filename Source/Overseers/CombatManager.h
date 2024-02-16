@@ -6,9 +6,10 @@
 #include "GameFramework/Actor.h"
 #include "CombatManager.generated.h"
 
-class AUnit;
-class AGridManager;
+class AMyCharacter;
 class ARoundManager;
+class AGridManager;
+class AUnit;
 
 UCLASS()
 class OVERSEERS_API ACombatManager : public AActor
@@ -22,6 +23,12 @@ public:
 	AGridManager* p_GridManager;
 
 	ARoundManager* p_RoundManager;
+
+	UPROPERTY(EditAnywhere)
+	float m_DamagePerUnitOnRoundLoss = 2;
+
+	UPROPERTY(EditAnywhere)
+	float m_DamagePerUnitOnRoundLossIncreasePerRound = 2;
 
 protected:
 	// Called when the game starts or when spawned
@@ -48,6 +55,10 @@ public:
 	void DeactivateUnitsInMatch(int participatingPlayerId);
 
 	void ActivateUnitsInMatch(int participatingPlayerId);
+
+	void ApplyDamageResultToCharacter(int winnerId, AMyCharacter* damagingCharacter);
+
+	void IncreaseDamagePerUnit() { m_DamagePerUnitOnRoundLoss += m_DamagePerUnitOnRoundLossIncreasePerRound; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetGridManager(AGridManager* gridManager) { p_GridManager = gridManager; }

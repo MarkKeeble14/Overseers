@@ -62,11 +62,26 @@ void ARoundManager::Tick(float DeltaTime)
 
 	if (!m_GameBegun) return;
 
+	if (m_WaitingOnNextRoundDelayTimer)
+	{
+		m_NextRoundDelayTimer -= DeltaTime;
+		if (m_NextRoundDelayTimer < 0)
+		{
+			p_CombatManager->Reset();
+
+			NextRound();
+			m_WaitingOnNextRoundDelayTimer = false;
+		}
+		return;
+	}
+
 	if (IsCurrentRoundCompleted(DeltaTime))
 	{
-		p_CombatManager->Reset();
+		p_CombatManager->IncreaseDamagePerUnit();
 
-		NextRound();
+		m_NextRoundDelayTimer = m_NextRoundDelay;
+		m_WaitingOnNextRoundDelayTimer = true;
+		UE_LOG(LogTemp, Warning, TEXT("Round Complete, Beginning Delay"));
 	}
 }
 
@@ -74,6 +89,8 @@ void ARoundManager::NextRound()
 {
 	m_CurrentRoundNumber++;
 	m_CurrentRoundType = (ERoundType)(m_CurrentRoundNumber % 2);
+	
+	UE_LOG(LogTemp, Warning, TEXT("New Round (Round #%d)"), m_CurrentRoundNumber);
 
 	switch (m_CurrentRoundType)
 	{

@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "CombatManager.h"
 #include "RoundManager.h"
 #include "GridManager.h"
 #include "GridCell.h"
 #include "Unit.h"
+#include "MyCharacter.h"
 
 // Sets default values
 ACombatManager::ACombatManager()
@@ -54,6 +54,8 @@ void ACombatManager::SetupMatch(int playerId1, int playerId2)
 
 		DeactivateUnitsInMatch(playerId1);
 
+		ApplyDamageResultToCharacter(playerId2, p_GridManager->GetPlayerBoardData(playerId1)->GetCharacter());
+
 		p_RoundManager->CombatConcluded();
 	}
 	else if (m_UnitsInCombat[playerId2].Num() == 0)
@@ -62,6 +64,8 @@ void ACombatManager::SetupMatch(int playerId1, int playerId2)
 		UE_LOG(LogTemp, Warning, TEXT("Player 1 Wins, Player 2 did not have Units on Board"));
 
 		DeactivateUnitsInMatch(playerId1);
+
+		ApplyDamageResultToCharacter(playerId1, p_GridManager->GetPlayerBoardData(playerId2)->GetCharacter());
 
 		p_RoundManager->CombatConcluded();
 	}
@@ -105,6 +109,10 @@ void ACombatManager::UnregisterUnitForCombat(int playerId, AUnit* unit)
 	{
 		DeactivateUnitsInMatch(playerId);
 
+		int winnerId = m_ActiveMatches[playerId];
+
+		ApplyDamageResultToCharacter(winnerId, p_GridManager->GetPlayerBoardData(playerId)->GetCharacter());
+
 		p_RoundManager->CombatConcluded();
 	}
 }
@@ -135,6 +143,19 @@ void ACombatManager::ActivateUnitsInMatch(int participatingPlayerId)
 	{
 		it->Activate();
 	}
+}
+
+void ACombatManager::ApplyDamageResultToCharacter(int winnerId, AMyCharacter* damagingCharacter)
+{
+	if (damagingCharacter == nullptr) return;
+
+	int numUnits = 0;
+	for (auto it : m_UnitsInCombat[winnerId])
+	{
+		numUnits += it->GetStage();
+	}
+
+	damagingCharacter->AlterGameHP(numUnits * m_DamagePerUnitOnRoundLoss * -1);
 }
 
 void ACombatManager::Reset()

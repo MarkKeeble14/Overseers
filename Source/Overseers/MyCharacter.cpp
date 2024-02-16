@@ -17,6 +17,8 @@ void AMyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetCharacterMovement()->JumpZVelocity = jumpStrength;
+
+	m_PlayerGameHP = m_MaxPlayerGameHP;
 }
 
 // Called every frame
@@ -75,6 +77,7 @@ void AMyCharacter::MoveForward(float AxisValue)
 
 		toMove = GetActorLocation() + (fwd * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1));
 		toMove.Z = GetActorLocation().Z;
+		LockToBounds(toMove);
 		SetActorLocation(toMove, 0);
 	}
 }
@@ -97,7 +100,28 @@ void AMyCharacter::MoveRight(float AxisValue)
 
 		toMove = GetActorLocation() + (hori * AxisValue * currentOversightFlySpeed * (currentAirDashBoost + 1));
 		toMove.Z = GetActorLocation().Z;
+		LockToBounds(toMove);
 		SetActorLocation(toMove, 0);
+	}
+}
+
+void AMyCharacter::LockToBounds(FVector& vec)
+{
+	if (vec.X < -m_XBound)
+	{
+		vec.X = -m_XBound;
+	}
+	if (vec.Y < -m_YBound)
+	{
+		vec.Y = -m_YBound;
+	}
+	if (vec.X > m_XBound)
+	{
+		vec.X = m_XBound;
+	}
+	if (vec.Y > m_YBound)
+	{
+		vec.Y = m_YBound;
 	}
 }
 
@@ -248,8 +272,6 @@ void AMyCharacter::ResetMovementStates()
 
 bool AMyCharacter::DidChangeTraitBreakpointRegion(ETrait trait, int previous, int current)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Did Change Trait Breakpoint Region Called: (%d, %d)"), previous, current);
-
 	if (p_TraitsManager == nullptr)
 	{
 		return false;
@@ -269,5 +291,27 @@ bool AMyCharacter::DidChangeTraitBreakpointRegion(ETrait trait, int previous, in
 		return nextBreakpoint == current;
 	}
 
+	return false;
+}
+
+bool AMyCharacter::AlterGameHP(float amount)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Alter Game HP Called (%d)"), amount);
+	/*
+	if (m_PlayerGameHP + amount < 0)
+	{
+		m_PlayerGameHP = 0;
+		return true;
+	}
+	else if (m_PlayerGameHP + amount > m_MaxPlayerGameHP)
+	{
+		m_PlayerGameHP = m_MaxPlayerGameHP;
+	}
+	else
+	{
+		m_PlayerGameHP += amount;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("New Player Game HP: %d"), m_PlayerGameHP);
+	*/
 	return false;
 }

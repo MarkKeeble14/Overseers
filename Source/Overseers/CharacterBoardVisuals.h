@@ -15,4 +15,13 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	FVector m_Color2 = FVector(0.25, 0.25, 0.25);
+
+	UPROPERTY(EditAnywhere)
+	UClass* m_BorderWall;
+
+	UPROPERTY(EditAnywhere)
+	float m_DistanceBetweenBorderWalls;
+
+	UPROPERTY(EditAnywhere)
+	float m_BorderWallsScale = 1;
 };

@@ -92,6 +92,8 @@ void AGridManager::MakeGrid(int playerId)
 		spawnedCell->SetOwnedByPlayerId(playerId);
 	}
 
+	SpawnBorderWall(playerId);
+
 	// Insert newly spawned board into map
 	spawnedGrid.Add(playerId, FBoardData{spawnedBoardCells, spawnedBenchCells, playerId, this});
 }
@@ -99,6 +101,8 @@ void AGridManager::MakeGrid(int playerId)
 void AGridManager::AttachPlayerToBoardData(int playerId, AMyCharacter* character)
 {
 	spawnedGrid[playerId].AttatchPlayer(character);
+	int bound = gridSpacing * (boardSize);
+	character->SetBounds(bound, bound);
 }
 
 void AGridManager::IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir)
@@ -119,6 +123,118 @@ void AGridManager::IncrementBenchPosition(int playerId, FVector* vec, float incB
 			break;
 		default:
 			break;
+	}
+}
+
+void AGridManager::SpawnBorderWall(int playerId)
+{
+	AActor* spawned = nullptr;
+	FVector spawnPos = FVector::ZeroVector;
+	float edgePos = gridSpacing * (boardSize + 1);
+	FRotator rotateWall = FRotator::ZeroRotator;
+
+	int scale = gridSpacing / 100 * boardSize * m_PlayerGridVisuals[playerId].m_BorderWallsScale;
+	const FVector wallScale = FVector(scale, 1, scale);
+
+	switch (playerId)
+	{
+		case 0:
+			spawnPos = FVector(0, edgePos, 0);
+			rotateWall = FRotator(0, 0, 0);
+
+			while (spawnPos.X < edgePos)
+			{
+				spawnPos += FVector(scale / 2, 0, 0);
+				spawned = GetWorld()->SpawnActor(m_PlayerGridVisuals[playerId].m_BorderWall, &spawnPos, &rotateWall);
+				spawned->SetActorScale3D(wallScale);
+			}
+			break;
+		case 1:
+			spawnPos = FVector(edgePos, 0, 0);
+			rotateWall = FRotator(0, 90, 0);
+
+			while (spawnPos.Y > -edgePos)
+			{
+				spawnPos += FVector(0, -scale / 2, 0);
+				spawned = GetWorld()->SpawnActor(m_PlayerGridVisuals[playerId].m_BorderWall, &spawnPos, &rotateWall);
+				spawned->SetActorScale3D(wallScale);
+			}
+			break;
+		case 2:
+			spawnPos = FVector(0, -edgePos, 0);
+			rotateWall = FRotator(0, 180, 0);
+
+			while (spawnPos.X > -edgePos)
+			{
+				spawnPos += FVector(-scale / 2, 0, 0);
+				spawned = GetWorld()->SpawnActor(m_PlayerGridVisuals[playerId].m_BorderWall, &spawnPos, &rotateWall);
+				spawned->SetActorScale3D(wallScale);
+			}
+			break;
+		case 3:
+			spawnPos = FVector(-edgePos, 0, 0);
+			rotateWall = FRotator(0, 270, 0);
+
+			while (spawnPos.Y < edgePos)
+			{
+				spawnPos += FVector(0, scale / 2, 0);
+				spawned = GetWorld()->SpawnActor(m_PlayerGridVisuals[playerId].m_BorderWall, &spawnPos, &rotateWall);
+				spawned->SetActorScale3D(wallScale);
+			}
+			break;
+	}
+
+	// Set variables
+	switch (playerId)
+	{
+	case 0:
+		spawnPos = FVector(edgePos, edgePos, 0);
+		rotateWall = FRotator(0, 90, 0);
+
+		while (spawnPos.Y > 0)
+		{
+			spawnPos += FVector(0, -scale / 2, 0);
+			spawned = GetWorld()->SpawnActor(m_PlayerGridVisuals[playerId].m_BorderWall, &spawnPos, &rotateWall);
+			spawned->SetActorScale3D(wallScale);
+		}
+
+		break;
+	case 1:
+		spawnPos = FVector(edgePos, -edgePos, 0);
+		rotateWall = FRotator(0, 180, 0);
+
+		while (spawnPos.X > 0)
+		{
+			spawnPos += FVector(-scale / 2, 0, 0);
+			spawned = GetWorld()->SpawnActor(m_PlayerGridVisuals[playerId].m_BorderWall, &spawnPos, &rotateWall);
+			spawned->SetActorScale3D(wallScale);
+		}
+
+		break;
+	case 2:
+		spawnPos = FVector(-edgePos, -edgePos, 0);
+		rotateWall = FRotator(0, 270, 0);
+
+		while (spawnPos.Y < 0)
+		{
+			spawnPos += FVector(0, scale / 2, 0);
+			spawned = GetWorld()->SpawnActor(m_PlayerGridVisuals[playerId].m_BorderWall, &spawnPos, &rotateWall);
+			spawned->SetActorScale3D(wallScale);
+		}
+
+		break;
+	case 3:
+		spawnPos = FVector(-edgePos, edgePos, 0);
+		rotateWall = FRotator(0, 0, 0);
+
+		while (spawnPos.X < 0)
+		{
+			spawnPos += FVector(scale / 2, 0, 0);
+			spawned = GetWorld()->SpawnActor(m_PlayerGridVisuals[playerId].m_BorderWall, &spawnPos, &rotateWall);
+			spawned->SetActorScale3D(wallScale);
+		}
+
+		break;
 	}
 }
 

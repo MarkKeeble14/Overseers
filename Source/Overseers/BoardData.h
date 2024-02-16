@@ -58,4 +58,6 @@ public:
 	bool UnitTypeIsContributingToTraits(AUnit* unit);
 
 	UGridCell* GetCellToSpawnOn();
+
+	AMyCharacter* GetCharacter() { return p_Representing; }
 };
