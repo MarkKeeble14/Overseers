@@ -77,6 +77,16 @@ public:
 	ATraitsManager* p_TraitsManager;
 
 	int m_PlayerId = 0;
+
+	// Game HP
+	UPROPERTY(EditAnywhere)
+	float m_MaxPlayerGameHP = 100;
+
+	float m_PlayerGameHP;
+
+	float m_XBound;
+
+	float m_YBound;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -102,8 +112,12 @@ protected:
 
 	int playerMode; // 0 = Grounded, 1 = Oversight, 2 = G -> O Transition. 3 -> O -> G Transition
 public:
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	bool AlterGameHP(float amount);
 
 	UFUNCTION(BlueprintCallable)
 	void MoveForward(float AxisValue);
@@ -156,4 +170,8 @@ public:
 	FOnTraitRemovedFromBoardSignature OnTraitRemovedFromBoard;
 
 	bool DidChangeTraitBreakpointRegion(ETrait trait, int previous, int current);
+
+	void SetBounds(float x, float y) { m_XBound = x; m_YBound = y; }
+
+	void LockToBounds(FVector& vec);
 };

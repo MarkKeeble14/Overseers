@@ -47,6 +47,13 @@ protected:
 	UPROPERTY(Replicated)
 	int m_CombatSeparatorState;
 
+	UPROPERTY(EditAnywhere)
+	float m_NextRoundDelay = 5;
+
+	float m_NextRoundDelayTimer;
+
+	bool m_WaitingOnNextRoundDelayTimer;
+
 	bool IsCurrentRoundCompleted(float DeltaTime);
 
 	void NextRound();

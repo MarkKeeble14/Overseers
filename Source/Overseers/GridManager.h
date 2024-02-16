@@ -81,6 +81,8 @@ protected:
 
 	void SpawnBoardSeparators();
 
+	void SpawnBorderWall(int playerId);
+
 	AActor* GetRespectiveBoardSeparator(int combatentId1, int combatentId2);
 
 	void SetBoardSeparatorState(bool active, AActor* separator);
