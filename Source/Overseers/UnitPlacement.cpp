@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "UnitPlacement.h"
+#include "EngineHelpers.h"
+#include "MyPlayerController.h"
 #include "Unit.h"
 #include <Kismet/GameplayStatics.h>
-#include "EngineHelpers.h"
 
 // Sets default values for this component's properties
 UUnitPlacement::UUnitPlacement()
@@ -78,6 +79,14 @@ ACellOccupant* UUnitPlacement::CreateUnit(UClass* toSpawn)
 	spawnedOccupant->Align();
 
 	return spawnedOccupant;
+}
+
+int UUnitPlacement::GetNumUnitsPlaced()
+{
+	if (p_PlacingFor == nullptr) return 0;
+	FBoardData* boardData = p_PlacingFor->GetPlayerBoardData();
+	if (boardData == nullptr) return 0;
+	return boardData->GetNumUnitsOnBoard();
 }
 
 void UUnitPlacement::PassUnitToHand(ACellOccupant* occupant)

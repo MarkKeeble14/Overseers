@@ -3,6 +3,7 @@
 
 #include "SelectLookingAt.h"
 #include "Unit.h"
+#include "MyPlayerController.h"
 
 // Sets default values for this component's properties
 USelectLookingAt::USelectLookingAt()

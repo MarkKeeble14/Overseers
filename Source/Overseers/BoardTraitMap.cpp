@@ -2,7 +2,7 @@
 
 
 #include "BoardTraitMap.h"
-#include "MyCharacter.h"
+#include "MyPlayerController.h"
 #include "GridManager.h"
 
 ETrait FBoardTraitMap::Add(ETrait trait)

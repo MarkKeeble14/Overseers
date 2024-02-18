@@ -36,12 +36,12 @@ public:
 	UGridCell* GetSelectedGridCell();
 
 	UFUNCTION(BlueprintCallable)
-	void SetSelectingFor(AMyCharacter* character) { m_SelectingFor = character; }
+	void SetSelectingFor(AMyPlayerController* player) { m_SelectingFor = player; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetAllowSelect(bool b) { m_AllowSelect = b; }
 private:
-	AMyCharacter* m_SelectingFor;
+	AMyPlayerController* m_SelectingFor;
 
 	bool m_AllowSelect;
 

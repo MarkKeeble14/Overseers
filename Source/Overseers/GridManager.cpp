@@ -2,6 +2,7 @@
 
 #include "GridManager.h"
 #include "GridCell.h"
+#include "MyCharacter.h"
 
 AGridManager::AGridManager()
 {
@@ -98,9 +99,18 @@ void AGridManager::MakeGrid(int playerId)
 	spawnedGrid.Add(playerId, FBoardData{spawnedBoardCells, spawnedBenchCells, playerId, this});
 }
 
-void AGridManager::AttachPlayerToBoardData(int playerId, AMyCharacter* character)
+void AGridManager::AttachPlayerToBoardData(int playerId, AMyPlayerController* character)
 {
-	spawnedGrid[playerId].AttatchPlayer(character);
+	spawnedGrid[playerId].AttachPlayerController(character);
+}
+
+void AGridManager::SetCharacterBounds(AMyCharacter* character)
+{
+	if (character == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Character passed to set character bounds was nullptr"));
+		return;
+	}
 	int bound = gridSpacing * (boardSize);
 	character->SetBounds(bound, bound);
 }

@@ -94,5 +94,8 @@ protected:
 	void MakeGrid(int playerId);
 
 	UFUNCTION(BlueprintCallable)
-	void AttachPlayerToBoardData(int playerId, AMyCharacter* character);
+	void AttachPlayerToBoardData(int playerId, AMyPlayerController* player);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterBounds(AMyCharacter* character);
 };

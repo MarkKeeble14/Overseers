@@ -10,6 +10,7 @@
 #include "GridManager.h"
 #include "UnitPlacement.generated.h"
 
+class AMyPlayerController;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class OVERSEERS_API UUnitPlacement : public UActorComponent
@@ -24,7 +25,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	AMyCharacter* p_PlacingFor;
+	AMyPlayerController* p_PlacingFor;
 
 	ACellOccupant* p_UnitInHand;
 
@@ -57,14 +58,8 @@ public:
 	bool IsHandEmpty() { return p_UnitInHand == nullptr; }
 
 	UFUNCTION(BlueprintCallable)
-	int GetNumUnitsPlaced() 
-	{ 
-		if (p_PlacingFor == nullptr) return 0;
-		FBoardData* boardData = p_PlacingFor->GetPlayerBoardData();
-		if (boardData == nullptr) return 0;
-		return boardData->GetNumUnitsOnBoard();
-	}
+	int GetNumUnitsPlaced();
 
 	UFUNCTION(BlueprintCallable)
-	void SetPlacingFor(AMyCharacter* character) { p_PlacingFor = character; }
+	void SetPlacingFor(AMyPlayerController* player) { p_PlacingFor = player; }
 };

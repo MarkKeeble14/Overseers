@@ -5,7 +5,7 @@
 #include "GridManager.h"
 #include "GridCell.h"
 #include "Unit.h"
-#include "MyCharacter.h"
+#include "MyPlayerController.h"
 
 // Sets default values
 ACombatManager::ACombatManager()
@@ -54,7 +54,7 @@ void ACombatManager::SetupMatch(int playerId1, int playerId2)
 
 		DeactivateUnitsInMatch(playerId1);
 
-		ApplyDamageResultToCharacter(playerId2, p_GridManager->GetPlayerBoardData(playerId1)->GetCharacter());
+		ApplyDamageResultToPlayer(playerId2, p_GridManager->GetPlayerBoardData(playerId1)->GetPlayerController());
 
 		p_RoundManager->CombatConcluded();
 	}
@@ -65,7 +65,7 @@ void ACombatManager::SetupMatch(int playerId1, int playerId2)
 
 		DeactivateUnitsInMatch(playerId1);
 
-		ApplyDamageResultToCharacter(playerId1, p_GridManager->GetPlayerBoardData(playerId2)->GetCharacter());
+		ApplyDamageResultToPlayer(playerId1, p_GridManager->GetPlayerBoardData(playerId2)->GetPlayerController());
 
 		p_RoundManager->CombatConcluded();
 	}
@@ -111,7 +111,7 @@ void ACombatManager::UnregisterUnitForCombat(int playerId, AUnit* unit)
 
 		int winnerId = m_ActiveMatches[playerId];
 
-		ApplyDamageResultToCharacter(winnerId, p_GridManager->GetPlayerBoardData(playerId)->GetCharacter());
+		ApplyDamageResultToPlayer(winnerId, p_GridManager->GetPlayerBoardData(playerId)->GetPlayerController());
 
 		p_RoundManager->CombatConcluded();
 	}
@@ -145,9 +145,9 @@ void ACombatManager::ActivateUnitsInMatch(int participatingPlayerId)
 	}
 }
 
-void ACombatManager::ApplyDamageResultToCharacter(int winnerId, AMyCharacter* damagingCharacter)
+void ACombatManager::ApplyDamageResultToPlayer(int winnerId, AMyPlayerController* damagingPlayer)
 {
-	if (damagingCharacter == nullptr) return;
+	if (damagingPlayer == nullptr) return;
 
 	int numUnits = 0;
 	for (auto it : m_UnitsInCombat[winnerId])
@@ -155,7 +155,7 @@ void ACombatManager::ApplyDamageResultToCharacter(int winnerId, AMyCharacter* da
 		numUnits += it->GetStage();
 	}
 
-	damagingCharacter->AlterGameHP(numUnits * m_DamagePerUnitOnRoundLoss * -1);
+	damagingPlayer->AlterGameHP(numUnits * m_DamagePerUnitOnRoundLoss * -1);
 }
 
 void ACombatManager::Reset()
