@@ -49,8 +49,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	TMap<int, FCharacterBoardVisuals> m_PlayerGridVisuals;
 
-	void SetupMatches(int config);
-
 	FBoardData* GetPlayerBoardData(int playerId) 
 	{
 		if (!spawnedGrid.Contains(playerId)) return nullptr;
@@ -79,8 +77,6 @@ protected:
 
 	void IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir);
 
-	void SpawnBoardSeparators();
-
 	void SpawnBorderWall(int playerId);
 
 	AActor* GetRespectiveBoardSeparator(int combatentId1, int combatentId2);
@@ -88,10 +84,16 @@ protected:
 	void SetBoardSeparatorState(bool active, AActor* separator);
 
 	UFUNCTION(BlueprintCallable)
-	void ClearBoard();
+	void SetupMatches(int config);
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnBoardSeparators();
 
 	UFUNCTION(BlueprintCallable)
 	void MakeGrid(int playerId);
+
+	UFUNCTION(BlueprintCallable)
+	void ClearBoard();
 
 	UFUNCTION(BlueprintCallable)
 	void AttachPlayerToBoardData(int playerId, AMyPlayerController* player);

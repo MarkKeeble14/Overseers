@@ -11,10 +11,6 @@ AGridManager::AGridManager()
 void AGridManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	SpawnBoardSeparators();
-
-	SetupMatches(m_StartingSeparatorConfig);
 }
 
 // Called every frame
