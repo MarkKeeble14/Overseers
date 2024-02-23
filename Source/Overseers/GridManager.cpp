@@ -6,6 +6,7 @@
 
 AGridManager::AGridManager()
 {
+	bReplicates = true;
 }
 
 void AGridManager::BeginPlay()
@@ -17,6 +18,13 @@ void AGridManager::BeginPlay()
 void AGridManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AGridManager::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	DOREPLIFETIME(ARoundManager, Owner);
+
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 void AGridManager::MakeGrid(int playerId)

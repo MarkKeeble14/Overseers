@@ -15,6 +15,21 @@ UCLASS()
 class OVERSEERS_API AGridManager : public AActor
 {
 	GENERATED_BODY()
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	TMap<int, FBoardData> spawnedGrid;
+
+	TMap<int, AActor*> spawnedBoardSeparators;
+
+	void IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir);
+
+	void SpawnBorderWall(int playerId);
+
+	AActor* GetRespectiveBoardSeparator(int combatentId1, int combatentId2);
+
+	void SetBoardSeparatorState(bool active, AActor* separator);
 
 public:
 	AGridManager();
@@ -49,10 +64,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	TMap<int, FCharacterBoardVisuals> m_PlayerGridVisuals;
 
-	FBoardData* GetPlayerBoardData(int playerId) 
+	FBoardData* GetPlayerBoardData(int playerId)
 	{
 		if (!spawnedGrid.Contains(playerId)) return nullptr;
-		return &spawnedGrid[playerId]; 
+		return &spawnedGrid[playerId];
 	}
 
 	UFUNCTION(BlueprintCallable)
@@ -67,21 +82,6 @@ public:
 	{
 		return boardSize * gridSpacing * 0.9;
 	}
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	TMap<int, FBoardData> spawnedGrid;
-
-	TMap<int, AActor*> spawnedBoardSeparators;
-
-	void IncrementBenchPosition(int playerId, FVector* vec, float incBy, int xDir, int yDir);
-
-	void SpawnBorderWall(int playerId);
-
-	AActor* GetRespectiveBoardSeparator(int combatentId1, int combatentId2);
-
-	void SetBoardSeparatorState(bool active, AActor* separator);
 
 	UFUNCTION(BlueprintCallable)
 	void SetupMatches(int config);
