@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "GridManager.h"
 #include "MyGameInstance.generated.h"
 
 /**

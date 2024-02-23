@@ -8,10 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
-#include "MyNetworkManager.h"
 #include <Kismet/GameplayStatics.h>
-#include "GridManager.h"
-#include "TraitsManager.h"
 #include "MyCharacter.generated.h"
 
 UCLASS()
@@ -19,12 +16,11 @@ class OVERSEERS_API AMyCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+private:
+	float m_XBound; float m_YBound;
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
-
-	UPROPERTY(EditAnywhere)
-	UInputMappingContext* myInputMappingContext;
 
 	// Jumping
 	UPROPERTY(EditAnywhere)
@@ -67,8 +63,6 @@ public:
 	float m_AscendTransitionSpeedMult = 3;
 	UPROPERTY(EditAnywhere)
 	float m_DescendTransitionSpeedMult = 7.5;
-
-	float m_XBound; float m_YBound;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -128,6 +122,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetPlayerMode() { return playerMode; }
 
+	UFUNCTION(BlueprintCallable)
 	void SetBounds(float x, float y) { m_XBound = x; m_YBound = y; }
 
 	void LockToBounds(FVector& vec);
