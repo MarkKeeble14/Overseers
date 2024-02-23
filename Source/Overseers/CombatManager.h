@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CombatManager.generated.h"
 
-class AMyCharacter;
+class AMyPlayerController;
 class ARoundManager;
 class AGridManager;
 class AUnit;
@@ -56,7 +56,7 @@ public:
 
 	void ActivateUnitsInMatch(int participatingPlayerId);
 
-	void ApplyDamageResultToCharacter(int winnerId, AMyCharacter* damagingCharacter);
+	void ApplyDamageResultToPlayer(int winnerId, AMyPlayerController* damagingPlayer);
 
 	void IncreaseDamagePerUnit() { m_DamagePerUnitOnRoundLoss += m_DamagePerUnitOnRoundLossIncreasePerRound; }
 

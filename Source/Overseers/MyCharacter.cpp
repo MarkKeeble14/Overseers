@@ -17,8 +17,6 @@ void AMyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetCharacterMovement()->JumpZVelocity = jumpStrength;
-
-	m_PlayerGameHP = m_MaxPlayerGameHP;
 }
 
 // Called every frame
@@ -268,50 +266,4 @@ void AMyCharacter::ResetMovementStates()
 	isSprinting = false;
 	isCrouched = false;
 	UpdateSpeed();
-}
-
-bool AMyCharacter::DidChangeTraitBreakpointRegion(ETrait trait, int previous, int current)
-{
-	if (p_TraitsManager == nullptr)
-	{
-		return false;
-	}
-
-	if (previous > current)
-	{
-		// Decreased
-		int lastBreakpoint = p_TraitsManager->GetLastBreakpoint(trait, previous);
-		return lastBreakpoint == current;
-	}
-	else if (current > previous)
-	{
-		// Increased
-		if (p_TraitsManager->IsMaxBreakpoint(trait, current)) return false;
-		int nextBreakpoint = p_TraitsManager->GetNextBreakpoint(trait, previous);
-		return nextBreakpoint == current;
-	}
-
-	return false;
-}
-
-bool AMyCharacter::AlterGameHP(float amount)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Alter Game HP Called (%d)"), amount);
-	/*
-	if (m_PlayerGameHP + amount < 0)
-	{
-		m_PlayerGameHP = 0;
-		return true;
-	}
-	else if (m_PlayerGameHP + amount > m_MaxPlayerGameHP)
-	{
-		m_PlayerGameHP = m_MaxPlayerGameHP;
-	}
-	else
-	{
-		m_PlayerGameHP += amount;
-	}
-	UE_LOG(LogTemp, Warning, TEXT("New Player Game HP: %d"), m_PlayerGameHP);
-	*/
-	return false;
 }

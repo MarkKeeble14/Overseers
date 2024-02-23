@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MyCharacter.h"
 #include "CellOccupant.generated.h"
 
+class AMyPlayerController;
 class UGridCell;
 
 UCLASS()
@@ -35,7 +35,7 @@ protected:
 
 	bool m_Placed;
 
-	AMyCharacter* p_BelongsTo;
+	AMyPlayerController* p_BelongsTo;
 
 public:	
 	// Called every frame
@@ -53,7 +53,7 @@ public:
 
 	void Remove(bool removeFromBoard);
 
-	void SetBelongsTo(AMyCharacter* character) { p_BelongsTo = character; }
+	void SetBelongsTo(AMyPlayerController* player) { p_BelongsTo = player; }
 
 	UGridCell* GetCellUnderneath();
 private:

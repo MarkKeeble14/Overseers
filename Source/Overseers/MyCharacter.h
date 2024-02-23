@@ -14,9 +14,6 @@
 #include "TraitsManager.h"
 #include "MyCharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTraitAddedToBoardSignature, ETrait, trait);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTraitRemovedFromBoardSignature, ETrait, trait);
-
 UCLASS()
 class OVERSEERS_API AMyCharacter : public ACharacter
 {
@@ -71,22 +68,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	float m_DescendTransitionSpeedMult = 7.5;
 
-	// References
-	AGridManager* p_GridManager;
-
-	ATraitsManager* p_TraitsManager;
-
-	int m_PlayerId = 0;
-
-	// Game HP
-	UPROPERTY(EditAnywhere)
-	float m_MaxPlayerGameHP = 100;
-
-	float m_PlayerGameHP;
-
-	float m_XBound;
-
-	float m_YBound;
+	float m_XBound; float m_YBound;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -117,9 +99,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	bool AlterGameHP(float amount);
-
-	UFUNCTION(BlueprintCallable)
 	void MoveForward(float AxisValue);
 
 	UFUNCTION(BlueprintCallable)
@@ -148,28 +127,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetPlayerMode() { return playerMode; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetPlayerId(int id) { m_PlayerId = id; }
-
-	UFUNCTION(BlueprintCallable)
-	int GetPlayerId() { return m_PlayerId; }
-
-	FBoardData* GetPlayerBoardData() { return p_GridManager->GetPlayerBoardData(m_PlayerId); }
-
-	UFUNCTION(BlueprintCallable)
-	void SetGridManager(AGridManager* gridManager) { p_GridManager = gridManager; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetTraitsManager(ATraitsManager* traitsManager) { p_TraitsManager = traitsManager; }
-
-	UPROPERTY(BlueprintAssignable)
-	FOnTraitAddedToBoardSignature OnTraitAddedToBoard;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnTraitRemovedFromBoardSignature OnTraitRemovedFromBoard;
-
-	bool DidChangeTraitBreakpointRegion(ETrait trait, int previous, int current);
 
 	void SetBounds(float x, float y) { m_XBound = x; m_YBound = y; }
 

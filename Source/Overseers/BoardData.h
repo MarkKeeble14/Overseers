@@ -6,9 +6,10 @@
 #include "BoardTraitMap.h"
 #include "BoardData.generated.h"
 
+class AMyPlayerController;
+class AGridManager;
 class AUnit;
 class UGridCell;
-class AGridManager;
 
 USTRUCT(BlueprintType)
 struct OVERSEERS_API FBoardData
@@ -18,7 +19,7 @@ struct OVERSEERS_API FBoardData
 private:
 	int m_BelongsTo;
 
-	AMyCharacter* p_Representing;
+	AMyPlayerController* p_Representing;
 
 public:
 	int m_NumUnitsOnBoard = 0;
@@ -42,10 +43,12 @@ public:
 
 	FBoardData() {}
 
-	void AttatchPlayer(AMyCharacter* character)
+	void AttachPlayerController(AMyPlayerController* player)
 	{
-		m_TraitsOnBoard.AttachCharacter(character);
+		m_TraitsOnBoard.AttachPlayerController(player);
 	}
+
+	AMyPlayerController* GetPlayerController() { return p_Representing; }
 
 	int GetNumUnitsOnBoard() { return m_NumUnitsOnBoard; }
 
@@ -58,6 +61,4 @@ public:
 	bool UnitTypeIsContributingToTraits(AUnit* unit);
 
 	UGridCell* GetCellToSpawnOn();
-
-	AMyCharacter* GetCharacter() { return p_Representing; }
 };

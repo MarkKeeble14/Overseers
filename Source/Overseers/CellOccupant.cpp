@@ -2,6 +2,7 @@
 
 #include "CellOccupant.h"
 #include "Unit.h"
+#include "MyPlayerController.h"
 #include "GridManager.h"
 #include "GridCell.h"
 #include "EngineHelpers.h"

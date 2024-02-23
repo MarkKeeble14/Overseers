@@ -5,7 +5,7 @@
 #include "Trait.h"
 #include "BoardTraitMap.generated.h"
 
-class AMyCharacter;
+class AMyPlayerController;
 
 USTRUCT(BlueprintType)
 struct OVERSEERS_API FBoardTraitMap
@@ -13,7 +13,7 @@ struct OVERSEERS_API FBoardTraitMap
 	GENERATED_USTRUCT_BODY()
 
 private:
-	AMyCharacter* p_Representing;
+	AMyPlayerController* p_Representing;
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<ETrait, int> m_TraitCounts;
@@ -22,7 +22,7 @@ public:
 
 	ETrait Remove(ETrait trait);
 
-	void AttachCharacter(AMyCharacter* character) { p_Representing = character; }
+	void AttachPlayerController(AMyPlayerController* player) { p_Representing = player; }
 
 	void LogState();
 };
