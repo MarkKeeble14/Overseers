@@ -1,0 +1,17 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\intermediate\\build\\win64\\unrealgame\\inc\\onlinesubsystemsteam\\uht\\steamnetconnection.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\unrealprojects\\overseers\\intermediate\\build\\win64\\x64\\overseers\\development\\engine\\sharedpch.engine.cpp20.h.pch",
+        "Includes": [
+            "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\intermediate\\build\\win64\\x64\\unrealgame\\development\\onlinesubsystemsteam\\definitions.onlinesubsystemsteam.h",
+            "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\source\\classes\\steamnetconnection.h",
+            "e:\\program files\\ubisoftgames\\ue_5.3\\engine\\plugins\\online\\onlinesubsystemutils\\source\\onlinesubsystemutils\\classes\\ipconnection.h",
+            "e:\\program files\\ubisoftgames\\ue_5.3\\engine\\plugins\\online\\onlinesubsystemutils\\intermediate\\build\\win64\\unrealgame\\inc\\onlinesubsystemutils\\uht\\ipconnection.generated.h",
+            "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\intermediate\\build\\win64\\unrealgame\\inc\\onlinesubsystemsteam\\uht\\steamnetconnection.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

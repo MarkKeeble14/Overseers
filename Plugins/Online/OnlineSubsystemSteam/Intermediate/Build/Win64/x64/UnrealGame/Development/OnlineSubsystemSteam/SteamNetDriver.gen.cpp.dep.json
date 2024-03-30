@@ -1,0 +1,21 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\intermediate\\build\\win64\\unrealgame\\inc\\onlinesubsystemsteam\\uht\\steamnetdriver.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\unrealprojects\\overseers\\intermediate\\build\\win64\\x64\\overseers\\development\\engine\\sharedpch.engine.cpp20.h.pch",
+        "Includes": [
+            "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\intermediate\\build\\win64\\x64\\unrealgame\\development\\onlinesubsystemsteam\\definitions.onlinesubsystemsteam.h",
+            "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\source\\classes\\steamnetdriver.h",
+            "e:\\program files\\ubisoftgames\\ue_5.3\\engine\\plugins\\online\\onlinesubsystemutils\\source\\onlinesubsystemutils\\classes\\ipnetdriver.h",
+            "e:\\program files\\ubisoftgames\\ue_5.3\\engine\\source\\runtime\\core\\public\\containers\\circularqueue.h",
+            "e:\\program files\\ubisoftgames\\ue_5.3\\engine\\source\\runtime\\sockets\\public\\socketsubsystem.h",
+            "e:\\program files\\ubisoftgames\\ue_5.3\\engine\\source\\runtime\\sockets\\public\\addressinfotypes.h",
+            "e:\\program files\\ubisoftgames\\ue_5.3\\engine\\source\\runtime\\core\\public\\containers\\spscqueue.h",
+            "e:\\program files\\ubisoftgames\\ue_5.3\\engine\\plugins\\online\\onlinesubsystemutils\\intermediate\\build\\win64\\unrealgame\\inc\\onlinesubsystemutils\\uht\\ipnetdriver.generated.h",
+            "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\intermediate\\build\\win64\\unrealgame\\inc\\onlinesubsystemsteam\\uht\\steamnetdriver.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
