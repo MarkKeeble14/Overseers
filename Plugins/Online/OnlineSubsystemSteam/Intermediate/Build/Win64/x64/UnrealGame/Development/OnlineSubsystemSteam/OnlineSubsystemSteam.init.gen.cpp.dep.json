@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\intermediate\\build\\win64\\unrealgame\\inc\\onlinesubsystemsteam\\uht\\onlinesubsystemsteam.init.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\unrealprojects\\overseers\\intermediate\\build\\win64\\x64\\overseers\\development\\engine\\sharedpch.engine.cpp20.h.pch",
+        "Includes": [
+            "d:\\unrealprojects\\overseers\\plugins\\online\\onlinesubsystemsteam\\intermediate\\build\\win64\\x64\\unrealgame\\development\\onlinesubsystemsteam\\definitions.onlinesubsystemsteam.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

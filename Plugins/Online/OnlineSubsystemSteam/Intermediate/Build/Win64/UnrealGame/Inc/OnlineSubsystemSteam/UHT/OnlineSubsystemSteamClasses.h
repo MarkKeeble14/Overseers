@@ -7,6 +7,6 @@
 #pragma once
 
 
-#include "SteamNetConnection.h"
-#include "SteamNetDriver.h"
+#include "Classes/SteamNetConnection.h"
+#include "Classes/SteamNetDriver.h"
 
